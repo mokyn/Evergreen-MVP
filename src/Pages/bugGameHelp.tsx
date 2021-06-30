@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Card from "./Components/Card";
+import Card from "../Components/Card";
 import { Link } from "react-router-dom";
 
 interface PageType {
