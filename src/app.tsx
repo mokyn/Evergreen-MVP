@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Game from "./Pages/bugGame";
 import "./index.css";
 import Help from "./Pages/bugGameHelp";
-import {Login, Home} from "./Pages/login";
-
+import { Login, Home } from "./Pages/login";
 
 const App = () => {
   return (

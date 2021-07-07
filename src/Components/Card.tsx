@@ -32,14 +32,14 @@ const Card: React.FC<CardProps> = (props) => {
               onClick={props.onClickPrev}
               className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
             >
-              Click Me!
+              Prev
             </button>
             <button
               type="button"
               onClick={props.onClickNext}
               className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
             >
-              No, Click Me!
+              Next
             </button>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ladyBugImg from "../images/ladybug.png";
 import beeImg from "../images/bee.png";
 import miteImg from "../images/mite.png";
