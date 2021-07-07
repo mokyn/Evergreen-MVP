@@ -4,6 +4,9 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import "../index.css";
+import GoogleButton from 'react-google-button'
+import Tree from '../images/pinetree.svg'
 
 let username: string;
 
@@ -15,38 +18,45 @@ var handle_login = () => {
     var credential = result.credential;
 
     // This gives you a Google Access Token. You can use it to access the Google API.
-    var token = credential.accessToken;
+    //var token = credential.accessToken;
     // The signed-in user info.
-    var user = result.user;
+    //var user = result.user;
     username = result.user.displayName;
     console.log(result.user.displayName);
     // ...
   }).catch((error) => {
     // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
+    //var errorCode = error.code;
+    //var errorMessage = error.message;
     // The email of the user's account used.
-    var email = error.email;
+    //var email = error.email;
     // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
+    //var credential = error.credential;
     // ...
   });
 }
 
 
 const Login = () => (
-  <div>
-    <h1 className="text-center text-green-500	font-bold text-3xl m-10">Evergreen</h1>
-    <div className="grid justify-items-stretch"><button onClick={handle_login} className="m-4 justify-self-center	bg-gray-300 border-2">Login with Google</button></div>
-    <div className="grid justify-items-stretch"><Link className="justify-self-center" to="/home">Go</Link></div>
-  </div>
+  <>
+    <div className="flex items-center justify-center m-8" >
+      <img src={Tree} className='m-0 w-20 h-50'></img>
+      <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">Evergreen</h1>
+    </div>
+    <div className="grid justify-items-center"><GoogleButton onClick={handle_login}/></div>
+    <div className="grid justify-items-stretch"><Link className="m-2 justify-self-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" to="/home">Go</Link></div>
+  </>
 )
 
 const Home = () => (
-  <div>
-    <p>{"Welcome "+ username}</p>
-    <div><Link to="/game">Play Game</Link></div>
-  </div>
+  <>
+    <div className="flex items-center justify-center m-8" >
+      <img src={Tree} className='m-0 w-20 h-50'></img>
+      <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">Evergreen</h1>
+    </div>
+    <p className="text-xl m-10">{"Welcome "+ username}</p>
+    <div><Link className="m-10 justify-self-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" to="/game">Play Bug Game</Link></div>
+  </>
 )
 
 export {Login, Home};

@@ -5,6 +5,7 @@ import beeImg from "../images/bee.png";
 import miteImg from "../images/mite.png";
 import slugImg from "../images/slug.png";
 import backgroundImg from "../images/background.jpg";
+import "../index.css";
 
 // number of bad bugs to be clicked to win the game
 const TARGET_CORRECT_GUESSES: number = 2;
