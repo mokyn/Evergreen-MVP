@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import "../index.css";
 import GoogleButton from "react-google-button";
 import Tree from "../images/pinetree.svg";
+import squirrelImg from "../images/squirrel.png";
 
 let username: string;
 
@@ -41,7 +42,11 @@ var handle_login = () => {
 const Login = () => (
   <>
     <div className="flex items-center justify-center m-8">
+<<<<<<< HEAD
       <img src={Tree} alt="logo" className="m-0 w-20 h-50"></img>
+=======
+      <img src={Tree} className="m-0 w-20 h-50" alt=""></img>
+>>>>>>> 2d96690858295b015c10c5517c3cfd2508d71e9d
       <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
         Evergreen
       </h1>
@@ -60,4 +65,35 @@ const Login = () => (
   </>
 );
 
+<<<<<<< HEAD
 export { Login, username };
+=======
+const Home = () => (
+  <>
+    <div className="flex items-center justify-center m-8">
+      <img src={Tree} className="m-0 w-20 h-50" alt=""></img>
+      <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
+        Evergreen
+      </h1>
+    </div>
+    <div className="flex flex-row">
+      <div className="max-h-xs max-w-xs mx-12">
+        <img className="w-auto h-auto" src={squirrelImg} alt="" />
+      </div>
+      <div>
+        <p className="text-xl m-10">{"Welcome " + username}</p>
+        <div>
+          <Link
+            className="m-10 justify-self-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            to="/game"
+          >
+            Play Bug Game
+          </Link>
+        </div>
+      </div>
+    </div>
+  </>
+);
+
+export { Login, Home };
+>>>>>>> 2d96690858295b015c10c5517c3cfd2508d71e9d
