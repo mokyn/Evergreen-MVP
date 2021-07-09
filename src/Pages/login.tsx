@@ -1,4 +1,4 @@
-import provider from "../firebase";
+import { provider } from "../firebase";
 //import 'firebaseui/dist/firebaseui.css'
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import "../index.css";
 import GoogleButton from "react-google-button";
 import Tree from "../images/pinetree.svg";
+import squirrelImg from "../images/squirrel.png";
 
 let username: string;
 
@@ -60,4 +61,6 @@ const Login = () => (
   </>
 );
 
-export {Login, username};
+
+export { Login, username };
+
