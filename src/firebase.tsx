@@ -8,6 +8,4 @@ import firebaseConfig from "./firebaseconfig";
 firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
-var provider = new firebase.auth.GoogleAuthProvider();
-
-export default provider;
+export const provider = new firebase.auth.GoogleAuthProvider();

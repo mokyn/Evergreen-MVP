@@ -1,4 +1,4 @@
-import provider from "../firebase";
+import { provider } from "../firebase";
 //import 'firebaseui/dist/firebaseui.css'
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -16,7 +16,7 @@ var handle_login = () => {
     .signInWithPopup(provider)
     .then((result) => {
       /** @type {firebase.auth.OAuthCredential} */
-      var credential = result.credential;
+      //var credential = result.credential;
 
       // This gives you a Google Access Token. You can use it to access the Google API.
       //var token = credential.accessToken;
@@ -41,7 +41,7 @@ var handle_login = () => {
 const Login = () => (
   <>
     <div className="flex items-center justify-center m-8">
-      <img src={Tree} className="m-0 w-20 h-50"></img>
+      <img src={Tree} alt="logo" className="m-0 w-20 h-50"></img>
       <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
         Evergreen
       </h1>
@@ -60,24 +60,4 @@ const Login = () => (
   </>
 );
 
-const Home = () => (
-  <>
-    <div className="flex items-center justify-center m-8">
-      <img src={Tree} className="m-0 w-20 h-50"></img>
-      <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
-        Evergreen
-      </h1>
-    </div>
-    <p className="text-xl m-10">{"Welcome " + username}</p>
-    <div>
-      <Link
-        className="m-10 justify-self-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        to="/game"
-      >
-        Play Bug Game
-      </Link>
-    </div>
-  </>
-);
-
-export { Login, Home };
+export { Login, username };
