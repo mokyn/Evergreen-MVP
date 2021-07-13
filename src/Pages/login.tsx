@@ -10,6 +10,7 @@ import Tree from "../images/pinetree.svg";
 import squirrelImg from "../images/squirrel.png";
 
 let username: string;
+let user;
 
 var handle_login = () => {
   firebase
@@ -22,9 +23,9 @@ var handle_login = () => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       //var token = credential.accessToken;
       // The signed-in user info.
-      //var user = result.user;
+      user = result.user;
+      console.log(user)
       username = result.user.displayName;
-      console.log(result.user.displayName);
       // ...
     })
     .catch((error) => {
@@ -62,5 +63,5 @@ const Login = () => (
 );
 
 
-export { Login, username };
+export { Login, username, user };
 
