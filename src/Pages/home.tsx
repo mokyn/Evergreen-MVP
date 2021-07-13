@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import Tree from "../images/pinetree.svg";
 import {username} from "./login";
 import bugGameIcon from "../images/bg.jpg"
-import {database} from "../firebase"
 
 class Activity {
     name:string;

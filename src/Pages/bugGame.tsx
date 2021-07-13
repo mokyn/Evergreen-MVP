@@ -5,8 +5,8 @@ import beeImg from "../images/bee.png";
 import miteImg from "../images/mite.png";
 import slugImg from "../images/slug.png";
 import backgroundImg from "../images/background.jpg";
-import {database} from "../firebase";
-import {username} from "./login";
+import { firestore } from "../firebase";
+import {userID} from "./login";
 import "../index.css";
 
 // number of bad bugs to be clicked to win the game
@@ -264,10 +264,28 @@ const Game: React.FC<GameProps> = (props) => {
   const numSpawnedBugs = useRef(0);
 
   const save_progress = ()=>{
-    database.ref('users/'+username).set({
-      bugGameProgress:correctBugs
-    })
+    const progressRef = firestore.collection(
+      "users/"+userID+"/progress"
+    );
+    progressRef
+      .doc('bugGame')
+      .set({
+        Progress: correctBugs,
+      })
+      .then(() => {
+        console.log("Progress Saved")
+      })
   }
+
+  useEffect(() => {
+    firestore.collection("users/"+userID+"/progress").doc("bugGame")
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        setCorrectBugs(doc.data().Progress);
+      }
+    })
+  },[])
 
   // component did mount
   useEffect(() => {

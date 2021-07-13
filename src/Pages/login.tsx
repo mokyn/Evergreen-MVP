@@ -11,6 +11,7 @@ import squirrelImg from "../images/squirrel.png";
 
 let username: string;
 let user;
+let userID: string;
 
 var handle_login = () => {
   firebase
@@ -24,8 +25,8 @@ var handle_login = () => {
       //var token = credential.accessToken;
       // The signed-in user info.
       user = result.user;
-      console.log(user)
       username = result.user.displayName;
+      userID = result.user.uid;
       // ...
     })
     .catch((error) => {
@@ -63,5 +64,5 @@ const Login = () => (
 );
 
 
-export { Login, username, user };
+export { Login, username, user, userID };
 
