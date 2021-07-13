@@ -3,49 +3,36 @@ import React, { useEffect, useState } from "react";
 import HorizontalCard from "../Components/HorizontalCard";
 import { firestore } from "../firebase";
 
-interface entryContentsType {
-  header: string;
-  body: string;
-  imgSrc: string;
-  date: string;
-}
-
-const ENTRY_CONTENTS: { [key: string]: entryContentsType } = {
-  1: {
-    header: "Heading One",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias aperiam quod distinctio. Earum, saepe nam.",
-    date: "January 1, 2021",
-    imgSrc:
-      "https://images.unsplash.com/photo-1482148454461-aaedae4b30bb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
-  },
-};
-
-const entryIds = Object.keys(ENTRY_CONTENTS);
-
 interface AddEntryFormProps {
   showForm: boolean;
   onToggleForm: () => void;
+  nextEntryNum: number;
+  setNextEntryNum: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
+  // handling form input with states
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
   const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
-    console.log(event.target.value);
   };
 
   const handleBodyChange = (event: any) => {
     setBody(event.target.value);
   };
 
+  /**
+   * Create a new doc with nextEntryNum and
+   * write to Firestore with data from form inputs
+   */
   const onSubmit = () => {
     const favTreesRef = firestore.collection(
       "users/htoo/favTrees/favTree1/entries"
     );
     favTreesRef
-      .doc(`entry2`)
+      .doc(`entry${props.nextEntryNum}`)
       .set({
         Body: body,
         Title: title,
@@ -54,6 +41,8 @@ const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
         console.log("successfully submitted");
         setBody("");
         setTitle("");
+        props.setNextEntryNum((prevState) => prevState + 1);
+        props.onToggleForm();
       });
   };
 
@@ -154,11 +143,31 @@ const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
 
 const TreeJournal: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
-  const [nextEntryNum, setNextEntryNum] = useState(2);
+
+  const [existingEntries, setExistingEntries] = useState<
+    firebase.firestore.DocumentData[]
+  >([]); // existingEntries cannot be initialized as just any array so I grabbed the specific array type from the eslint error popup
+
+  const [nextEntryNum, setNextEntryNum] = useState(0); // nextEntryNum is passed into child component and also updated from the child component
 
   const onToggleForm = () => {
     setShowForm((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    // console.log("useEffect run");
+    // reads the existing entries from firestore, renders them, sets nextEntryNum
+    firestore
+      .collection("users/htoo/favTrees/favTree1/entries")
+      .get()
+      .then((snapshot) => {
+        setExistingEntries(snapshot.docs.map((doc) => doc.data()));
+      })
+      .then(() => {
+        setNextEntryNum(existingEntries.length);
+        // console.log(nextEntryNum);
+      });
+  }, [existingEntries.length, nextEntryNum]);
 
   //   const getAge = () => {
   //     const docRef = firestore.doc("users/htoo");
@@ -172,16 +181,21 @@ const TreeJournal: React.FC = () => {
 
   return (
     <>
-      <AddEntryForm showForm={showForm} onToggleForm={onToggleForm} />
+      <AddEntryForm
+        showForm={showForm}
+        onToggleForm={onToggleForm}
+        nextEntryNum={nextEntryNum}
+        setNextEntryNum={setNextEntryNum}
+      />
       <div>
-        {entryIds.map((entryId) => {
+        {existingEntries.map((exisitingEntry: any) => {
           return (
             <div className="flex flex-col gap-6 w-screen justify-center items-center">
               <HorizontalCard
-                imgSrc={ENTRY_CONTENTS[entryId].imgSrc}
-                header={ENTRY_CONTENTS[entryId].header}
-                body={ENTRY_CONTENTS[entryId].body}
-                date={ENTRY_CONTENTS[entryId].date}
+                imgSrc="https://images.unsplash.com/photo-1521062849558-8e32f69ba41d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                header={exisitingEntry.Title}
+                body={exisitingEntry.Body}
+                date="January 01, 2021"
               />
             </div>
           );
