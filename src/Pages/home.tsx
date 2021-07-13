@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Tree from "../images/pinetree.svg";
 import {username} from "./login";
 import bugGameIcon from "../images/bg.jpg"
+import {database} from "../firebase"
 
 class Activity {
     name:string;
@@ -37,6 +38,13 @@ interface SquareProps {
   }
 
 const Home = () => {
+    /*
+    let progress;
+    var progressRef = database.ref('users/' + username + '/bugGameProgress');
+    progressRef.on('value', (snapshot) => {
+        progress = snapshot.val();
+    });
+    */
     var activities: Activity[] = [];
     activities.push(new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!"))
     return (
