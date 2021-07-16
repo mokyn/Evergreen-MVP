@@ -6,39 +6,15 @@ import { Link } from "react-router-dom";
 import "../index.css";
 import GoogleButton from "react-google-button";
 import Tree from "../images/pinetree.svg";
-import squirrelImg from "../images/squirrel.png";
-import { Redirect} from "react-router";
 
 let username: string;
 let user;
 let userID: string;
 
-var handle_login = () => {
+const handle_login = () => {
   firebase
     .auth()
     .signInWithPopup(provider)
-    .then((result) => {
-      /** @type {firebase.auth.OAuthCredential} */
-      //var credential = result.credential;
-
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      //var token = credential.accessToken;
-      // The signed-in user info.
-      user = result.user;
-      username = result.user.displayName;
-      userID = result.user.uid;
-      // ...
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      //var errorCode = error.code;
-      //var errorMessage = error.message;
-      // The email of the user's account used.
-      //var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      //var credential = error.credential;
-      // ...
-    });
 };
 
 const Login = () => {
@@ -66,5 +42,5 @@ const Login = () => {
   };
 
 
-export { Login, username, user, userID };
+export default Login;
 

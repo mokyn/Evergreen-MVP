@@ -6,7 +6,6 @@ import miteImg from "../images/mite.png";
 import slugImg from "../images/slug.png";
 import backgroundImg from "../images/background.jpg";
 import { firestore } from "../firebase";
-import {userID} from "./login";
 import "../index.css";
 
 // number of bad bugs to be clicked to win the game

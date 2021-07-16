@@ -1,17 +1,13 @@
 import React, {useState} from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Game from "./Pages/bugGame";
 import "./index.css";
 import Help from "./Pages/bugGameHelp";
 import firebase from "firebase/app";
-import { Login, user } from "./Pages/login";
+import Login from "./Pages/login";
 import Home from "./Pages/home";
 import TreeJournal from "./Pages/treeJournal";
 import { isPropertySignature } from "typescript";
-
-//let username: string;
-//let user;
-//let userID: string;
 
 const App: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -25,7 +21,7 @@ const App: React.FC = () => {
       console.log(username,userID)
     }
     else {
-      console.log("not logged in??")
+      console.log("Not logged in.")
     }
   })
 
@@ -46,5 +42,4 @@ const App: React.FC = () => {
   );
 };
 
-//export {username, user, userID};
 export default App;
