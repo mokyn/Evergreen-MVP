@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Tree from "../images/pinetree.svg";
-import {username} from "./login";
 import bugGameIcon from "../images/bg.jpg"
+import squirrelImage from "../images/squirrel.png"
 
 class Activity {
     name:string;
@@ -36,7 +36,12 @@ interface SquareProps {
     desc: string;
   }
 
-const Home = () => {
+interface HomeProps {
+    userID: string;
+    username: string;
+}
+
+const Home: React.FC<HomeProps> = (props) => {
     /*
     let progress;
     var progressRef = database.ref('users/' + username + '/bugGameProgress');
@@ -54,7 +59,7 @@ const Home = () => {
             Evergreen
           </h1>
         </div>
-        <p className="text-xl m-10">{"Welcome " + username}</p>
+        <p className="text-xl m-10">{"Welcome " + props.username}</p>
         <div className="flex m-10 gap-2">
             {activities.map((activity) => {
                 return (
@@ -62,6 +67,7 @@ const Home = () => {
                 );
             })}
         </div>
+        <img className="absolute bottom-0 left-0 h-64 w-64" src={squirrelImage}></img>
       </>
     )
     };
