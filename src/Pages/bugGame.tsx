@@ -245,7 +245,10 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 };
 
 
-interface GameProps {}
+interface GameProps {
+  userID: string;
+  username: string;
+}
 
 // main parent component
 const Game: React.FC<GameProps> = (props) => {
@@ -265,7 +268,7 @@ const Game: React.FC<GameProps> = (props) => {
 
   const save_progress = ()=>{
     const progressRef = firestore.collection(
-      "users/"+userID+"/progress"
+      "users/"+props.userID+"/progress"
     );
     progressRef
       .doc('bugGame')
@@ -278,7 +281,7 @@ const Game: React.FC<GameProps> = (props) => {
   }
 
   useEffect(() => {
-    firestore.collection("users/"+userID+"/progress").doc("bugGame")
+    firestore.collection("users/"+props.userID+"/progress").doc("bugGame")
     .get()
     .then((doc) => {
       if (doc.exists) {

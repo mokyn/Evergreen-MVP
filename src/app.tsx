@@ -36,7 +36,9 @@ const App: React.FC = () => {
         <Route exact path="/home">
           <Home userID={userID} username={username}/>
         </Route>
-        <Route exact path="/game" component={Game} />
+        <Route exact path="/game">
+          <Game userID={userID} username={username}/>
+        </Route>
         <Route exact path="/help" component={Help} />
         <Route exact path="/demo" component={TreeJournal} />
       </Switch>

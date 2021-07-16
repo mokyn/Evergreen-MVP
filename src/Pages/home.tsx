@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Tree from "../images/pinetree.svg";
 import bugGameIcon from "../images/bg.jpg"
 import squirrelImage from "../images/squirrel.png"
+import favTreeIcon from "../images/favTree2.png"
 
 class Activity {
     name:string;
@@ -22,7 +23,7 @@ const Square: React.FC<SquareProps> = (props) => {
         <div className="rounded bg-green-500">
             <Link to={props.url}>
                 <h2 className="text-white text-center text-xl">{props.name}</h2>
-                <img alt="thumbnail" src={props.image} width="200" height="200"></img>
+                <img className="object-right" alt="thumbnail" src={props.image} width="200" height="200"></img>
                 <p className="text-white text-center">{props.desc}</p>
             </Link>
         </div>
@@ -51,6 +52,7 @@ const Home: React.FC<HomeProps> = (props) => {
     */
     var activities: Activity[] = [];
     activities.push(new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!"))
+    activities.push(new Activity("My Favorite Tree", "/demo", favTreeIcon, "Tree Log!"))
     return (
         <>
         <div className="flex items-center justify-center m-8">
