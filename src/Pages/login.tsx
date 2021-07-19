@@ -19,7 +19,7 @@ const handle_login = () => {
 
 const Login = () => {
     return (
-      <>
+      <div>
         <div className="flex items-center justify-center m-8">
           <img src={Tree} alt="logo" className="m-0 w-20 h-50"></img>
           <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
@@ -37,7 +37,7 @@ const Login = () => {
             Go
           </Link>
         </div>
-      </>
+      </div>
     )
   };
 

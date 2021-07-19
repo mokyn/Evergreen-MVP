@@ -54,23 +54,23 @@ const Home: React.FC<HomeProps> = (props) => {
     activities.push(new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!"))
     activities.push(new Activity("My Favorite Tree", "/demo", favTreeIcon, "Tree Log!"))
     return (
-        <>
-        <div className="flex items-center justify-center m-8">
-          <img alt="logo" src={Tree} className="m-0 w-20 h-50"></img>
-          <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
-            Evergreen
-          </h1>
-        </div>
-        <p className="text-xl m-10">{"Welcome " + props.username}</p>
-        <div className="flex m-10 gap-2">
-            {activities.map((activity) => {
-                return (
-                <Square name={activity.name} image={activity.image} url={activity.url} desc={activity.desc}/>
-                );
-            })}
-        </div>
-        <img className="absolute bottom-0 left-0 h-64 w-64" src={squirrelImage}></img>
-      </>
+        <div>
+            <div className="flex items-center justify-center m-8">
+            <img alt="logo" src={Tree} className="m-0 w-20 h-50"></img>
+            <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
+                Evergreen
+            </h1>
+            </div>
+            <p className="text-xl m-10">{"Welcome " + props.username}</p>
+            <div className="flex m-10 gap-2">
+                {activities.map((activity) => {
+                    return (
+                    <Square name={activity.name} image={activity.image} url={activity.url} desc={activity.desc}/>
+                    );
+                })}
+            </div>
+            <img className="absolute bottom-0 left-0 h-64 w-64" src={squirrelImage}></img>
+      </div>
     )
     };
 

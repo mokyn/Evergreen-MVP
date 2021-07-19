@@ -2,12 +2,13 @@ import React, {useState} from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Game from "./Pages/bugGame";
 import "./index.css";
+import "./transitions.css";
 import Help from "./Pages/bugGameHelp";
 import firebase from "firebase/app";
 import Login from "./Pages/login";
 import Home from "./Pages/home";
 import TreeJournal from "./Pages/treeJournal";
-import { isPropertySignature } from "typescript";
+import { AnimatedSwitch } from 'react-router-transition';
 
 const App: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -27,8 +28,18 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <Switch>
-        <Route exact path="/" component={Login} />
+      <AnimatedSwitch
+            atEnter={{ opacity: 0 }}
+            atLeave={{ opacity: 0 }}
+            atActive={{ opacity: 1 }}
+            className="switch-wrapper">
+        <Route exact path="/">
+          {username ?
+          <Home userID={userID} username={username}/>
+          :
+          <Login/>
+          }
+        </Route>
         <Route exact path="/home">
           <Home userID={userID} username={username}/>
         </Route>
@@ -37,7 +48,7 @@ const App: React.FC = () => {
         </Route>
         <Route exact path="/help" component={Help} />
         <Route exact path="/demo" component={TreeJournal} />
-      </Switch>
+      </AnimatedSwitch>
     </Router>
   );
 };
