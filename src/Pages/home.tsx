@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import Tree from "../images/pinetree.svg";
 import bugGameIcon from "../images/bg.jpg"
 import squirrelImage from "../images/squirrel.png"
 import favTreeIcon from "../images/favTree2.png"
-import { firestore } from "../firebase";
+import achievementsIcon from "../images/achievements.gif"
 
 class Activity {
     name:string;
@@ -48,18 +47,7 @@ const Home: React.FC<HomeProps> = (props) => {
     var activities: Activity[] = [];
     activities.push(new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!"))
     activities.push(new Activity("My Favorite Tree", "/demo", favTreeIcon, "Tree Log!"))
-
-    /*
-    useEffect(() => {
-        firestore.collection("users/"+props.userID+"/achievements").doc("bugGame")
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            setCorrectBugs(doc.data().Progress);
-          }
-        })
-      },[])
-    */
+    activities.push(new Activity("Achievements", "/achievements", achievementsIcon, "View your progress!"))
 
     return (
         <div>

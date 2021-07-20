@@ -7,6 +7,7 @@ import Help from "./Pages/bugGameHelp";
 import firebase from "firebase/app";
 import Login from "./Pages/login";
 import Home from "./Pages/home";
+import Achievements from "./Pages/achievements";
 import TreeJournal from "./Pages/treeJournal";
 import { AnimatedSwitch } from 'react-router-transition';
 
@@ -45,6 +46,9 @@ const App: React.FC = () => {
         </Route>
         <Route exact path="/game">
           <Game userID={userID} username={username}/>
+        </Route>
+        <Route exact path="/achievements">
+          <Achievements userID={userID} username={username}/>
         </Route>
         <Route exact path="/help" component={Help} />
         <Route exact path="/demo" component={TreeJournal} />
