@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Tree from "../images/pinetree.svg";
 import bugGameIcon from "../images/bg.jpg"
 import squirrelImage from "../images/squirrel.png"
@@ -12,7 +12,16 @@ interface AchievementsProps {
 }
 
 const Achievements: React.FC<AchievementsProps> = (props) => {
-    
+    const [medals, setMedals] = useState([])
+    useEffect(() => {
+        firestore
+          .collection("users/"+props.userID+"/achievements/")
+          .get()
+          .then((snapshot) => {
+            setMedals(snapshot.docs.map((doc) => doc.data()));
+          })
+      }, []);
+
     return (
         <div>
             <Link to="/home" className="z-20 absolute top-4 left-8">
