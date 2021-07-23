@@ -48,7 +48,11 @@ const App: React.FC = () => {
           <Game userID={userID} username={username}/>
         </Route>
         <Route exact path="/achievements">
-          <Achievements userID={userID} username={username}/>
+          {username ?
+            <Achievements userID={userID} username={username}/>
+            :
+            <Login/>
+            }
         </Route>
         <Route exact path="/help" component={Help} />
         <Route exact path="/demo" component={TreeJournal} />
