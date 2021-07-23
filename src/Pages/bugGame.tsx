@@ -9,7 +9,7 @@ import { firestore } from "../firebase";
 import "../index.css";
 
 // number of bad bugs to be clicked to win the game
-const TARGET_CORRECT_GUESSES: number = 10;
+const TARGET_CORRECT_GUESSES: number = 15;
 
 // number of max bugs on screen at any time
 const UPPER_BUG_COUNT: number = 10;
@@ -333,10 +333,9 @@ const Game: React.FC<GameProps> = (props) => {
       if (!BUGS[bugType].isFriendly) {
         if (!hasWon) {
           setCorrectBugs((prevState) => {return prevState+1});
-        }
-
-        if (correctBugs==TARGET_CORRECT_GUESSES) {
-          setHasWon(true);
+          if (correctBugs+1==TARGET_CORRECT_GUESSES) {
+            setHasWon(true);
+          }
         }
       }
       }
