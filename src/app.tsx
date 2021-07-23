@@ -19,7 +19,9 @@ const App: React.FC = () => {
       if (user.displayName) {
         setUsername(user.displayName)
       }
-      setUserID(user.uid)
+      if (user.uid) {
+        setUserID(user.uid)
+      }
       console.log(username,userID)
     }
     else {
@@ -29,17 +31,16 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      {(!username || !userID) ?
+      <Login/>
+      :
       <AnimatedSwitch
             atEnter={{ opacity: 0 }}
             atLeave={{ opacity: 0 }}
             atActive={{ opacity: 1 }}
             className="switch-wrapper">
         <Route exact path="/">
-          {username ?
           <Home userID={userID} username={username}/>
-          :
-          <Login/>
-          }
         </Route>
         <Route exact path="/home">
           <Home userID={userID} username={username}/>
@@ -48,15 +49,12 @@ const App: React.FC = () => {
           <Game userID={userID} username={username}/>
         </Route>
         <Route exact path="/achievements">
-          {username ?
-            <Achievements userID={userID} username={username}/>
-            :
-            <Login/>
-            }
+          <Achievements userID={userID} username={username}/>
         </Route>
         <Route exact path="/help" component={Help} />
         <Route exact path="/demo" component={TreeJournal} />
       </AnimatedSwitch>
+      }
     </Router>
   );
 };

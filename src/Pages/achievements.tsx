@@ -5,10 +5,6 @@ import { string } from "yargs";
 import gold from "../images/gold.png"
 import silver from "../images/silver.png"
 import bronze from "../images/bronze.png"
-interface AchievementsProps {
-    userID: string;
-    username: string;
-}
 
 const medalImage = (medal) => {
     var i
@@ -25,6 +21,11 @@ const medalImage = (medal) => {
             <p className="text-center">{medal[0]}</p>
         </div>
     )
+}
+
+interface AchievementsProps {
+    userID: string;
+    username: string;
 }
 
 const Achievements: React.FC<AchievementsProps> = (props) => {
