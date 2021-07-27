@@ -236,7 +236,7 @@ const Game: React.FC<GameProps> = (props) => {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        setCorrectBugs(doc.data().Progress);
+        setCorrectBugs(doc?.data()?.Progress);
       }
     })
   },[props.userID])

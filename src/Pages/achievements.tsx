@@ -45,7 +45,8 @@ const Achievements: React.FC<AchievementsProps> = (props) => {
         .get()
         .then((doc) => {
           if (doc.exists) {
-            setProgress(doc.data().Progress);
+            setProgress(doc?.data()?.Progress);
+        
           }
         })
       },[props.userID]);
