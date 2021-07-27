@@ -23,6 +23,9 @@ var handle_login = () => {
       //var token = credential.accessToken;
       // The signed-in user info.
       //var user = result.user;
+      if (!result?.user?.displayName) {
+        return;
+      }
       username = result.user.displayName;
       console.log(result.user.displayName);
       // ...
@@ -61,6 +64,4 @@ const Login = () => (
   </>
 );
 
-
 export { Login, username };
-

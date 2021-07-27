@@ -5,14 +5,15 @@ interface horizontalCardProps {
   header: string;
   body: string;
   date: string;
+  onDelete: () => void;
 }
 
 const HorizontalCard: React.FC<horizontalCardProps> = (props) => {
   return (
     <div className="flex flex-row gap-4 max-w-screen-md m-6">
-      <div className="max-w-xs max-h-xs">
+      <div className="">
         <img
-          className="w-auto h-auto rounded-lg shadow-xl"
+          className="block max-w-64 max-h-64 w-auto h-auto rounded-lg shadow-xl"
           src={props.imgSrc}
           alt=""
         />
@@ -21,6 +22,14 @@ const HorizontalCard: React.FC<horizontalCardProps> = (props) => {
         <p className="px-6 py-4 mt-2">{props.header}</p>
         <p className="px-6 py-2">{props.date}</p>
         <p className="px-6 py-2">{props.body}</p>
+        <div className="flex justify-end items-end mx-6 py-4">
+          <button
+            onClick={props.onDelete}
+            className="w-32 bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );
