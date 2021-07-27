@@ -5,13 +5,15 @@ import beeImg from "../images/bee.png";
 import miteImg from "../images/mite.png";
 import slugImg from "../images/slug.png";
 import backgroundImg from "../images/background.jpg";
+import { firestore } from "../firebase";
 import "../index.css";
+import ProgressBar from "../Components/ProgressBar";
 
 // number of bad bugs to be clicked to win the game
-const TARGET_CORRECT_GUESSES: number = 2;
+const TARGET_CORRECT_GUESSES: number = 15;
 
 // number of max bugs on screen at any time
-const UPPER_BUG_COUNT: number = 5;
+const UPPER_BUG_COUNT: number = 10;
 
 const VIEW_WIDTH = document.documentElement.clientWidth;
 const VIEW_HEIGHT = document.documentElement.clientHeight;
@@ -194,55 +196,10 @@ const BUGS: { [key: string]: BugItem } = {
 };
 
 const bugTypes = Object.keys(BUGS);
-
-interface ProgressBarProps {
-  barLength: number;
-  progressPercent: number;
+interface GameProps {
+  userID: string;
+  username: string;
 }
-
-const ProgressBar: React.FC<ProgressBarProps> = (props) => {
-  const [progressBarLength, setProgresBarLength] = useState(0);
-
-  // runs every time the component rerenders
-  useEffect(() => {
-    setProgresBarLength(props.progressPercent * props.barLength);
-  }, [props.progressPercent]);
-
-  // const progressBarContainerStyle = {
-  //   Position: "absolute",
-  //   left: "100px",
-  //   top: "100px",
-  //   display: "flex",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   ZIndex: "10",
-  // };
-
-  const progressBarStyle = {
-    backgroundColor: "rgb(233, 233, 233)",
-    borderRadius: "0.5rem",
-    width: `${props.barLength}px`,
-  };
-
-  const filledProgressBarStyle = {
-    backgroundColor: "rgb(62, 122, 235)",
-    height: "10px",
-    borderRadius: "1rem",
-    width: `${progressBarLength}px`,
-    // animation
-    transition: "1s ease",
-  };
-
-  return (
-    <div className="absolute top-16 left-16 z-10">
-      <div style={progressBarStyle}>
-        <div style={filledProgressBarStyle} />
-      </div>
-    </div>
-  );
-};
-
-interface GameProps {}
 
 // main parent component
 const Game: React.FC<GameProps> = (props) => {
@@ -251,7 +208,7 @@ const Game: React.FC<GameProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [currentBugType, setCurrentBugType] = useState(""); // so that modal component knows a bug is good or bad
   const [hasWon, setHasWon] = useState(false);
-  const [correctBugs, setCorrectBugs] = useState(new Set()); // tracking progress
+  const [correctBugs, setCorrectBugs] = useState(0); // tracking progress
   const [bugIds, setBugIds] = useState<number[]>([]); // an array of bug ids
 
   const intervalID = useRef(0);
@@ -259,6 +216,30 @@ const Game: React.FC<GameProps> = (props) => {
   // this variable keeps track of total # of spawned bugs
   // also sets the id for a newest spawned bug
   const numSpawnedBugs = useRef(0);
+
+  const save_progress = ()=>{
+    const progressRef = firestore.collection(
+      "users/"+props.userID+"/progress"
+    );
+    progressRef
+      .doc('bugGame')
+      .set({
+        Progress: correctBugs,
+      })
+      .then(() => {
+        console.log("Progress Saved")
+      })
+  }
+
+  useEffect(() => {
+    firestore.collection("users/"+props.userID+"/progress").doc("bugGame")
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        setCorrectBugs(doc.data().Progress);
+      }
+    })
+  },[props.userID])
 
   // component did mount
   useEffect(() => {
@@ -303,54 +284,13 @@ const Game: React.FC<GameProps> = (props) => {
     if (BUGS[bugType]) {
       if (!BUGS[bugType].isFriendly) {
         if (!hasWon) {
-          if (!correctBugs.has(bugType)) {
-            // does not have bugId yet
-            if (correctBugs.add(bugType).size === TARGET_CORRECT_GUESSES) {
-              // check for win on next guess
-              // if win, don't reset yet so that progress bar shows full right after winning
-              setHasWon(true);
-              setCorrectBugs((prevState) => {
-                return new Set([...prevState, bugType]);
-              });
-            } else {
-              // if next guess not win, just add to list
-              setHasWon(false);
-              setCorrectBugs((prevState) => {
-                return new Set([...prevState, bugType]);
-              });
-            }
-          } else {
-            // already has bugId
-            // do nothing
+          setCorrectBugs((prevState) => {return prevState+1});
+          if (correctBugs+1===TARGET_CORRECT_GUESSES) {
+            setHasWon(true);
           }
-        } else {
-          // reset if u click bad bug after winning game
-          setHasWon(false);
-          setCorrectBugs(new Set());
-          setCorrectBugs((prevState) => {
-            return new Set([...prevState, bugType]);
-          });
-        }
-      } else {
-        // if bug is not friendly
-        if (hasWon) {
-          // reset if u click good bug after winning game
-          setHasWon(false);
-          setCorrectBugs(new Set());
-        } else {
-          // this triggers when correctBugs set is either empty or not-yet-full
-          // two possibilities
-          // resets all progress if u click on a good bug
-          setHasWon(false);
-          setCorrectBugs(new Set());
-
-          // or keep the current progress (keep the set)
-          //   setHasWon(false);
         }
       }
-    } else {
-      throw new Error("Whoops! The given BugId does not exist in BUGS object.");
-    }
+      }
 
     // removes the bug from bugIds array so that it is no longer rendered
     let newBugs = bugIds;
@@ -381,6 +321,14 @@ const Game: React.FC<GameProps> = (props) => {
   // render
   return (
     <>
+      <Link to="/home" className="z-20 absolute top-4 left-8">
+        <button onClick={save_progress}
+          className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+          type="button"
+        >
+          Home
+        </button>
+      </Link>
       <Link to="/help" className="z-20 absolute top-4 right-8">
         <button
           className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
@@ -395,8 +343,9 @@ const Game: React.FC<GameProps> = (props) => {
         hasWon={hasWon}
         onClick={() => toggleModal()}
       />
-
-      <ProgressBar barLength={400} progressPercent={correctBugs.size / 2} />
+      <div className="absolute top-16 left-16 z-10">
+        <ProgressBar barLength={400} progressPercent={correctBugs / TARGET_CORRECT_GUESSES} />
+      </div>
 
       <div className="absolute top-0 left-0 z-10">
         <svg className="w-screen h-screen">

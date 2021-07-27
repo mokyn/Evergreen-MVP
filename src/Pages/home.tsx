@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import Tree from "../images/pinetree.svg";
-import {username} from "./login";
 import bugGameIcon from "../images/bg.jpg"
-
+import squirrelImage from "../images/squirrel.png"
+import favTreeIcon from "../images/favTree2.png"
+import achievementsIcon from "../images/achievements.jpg"
+import treeShapesIcon from "../images/treeShapesIcon.jpg"
 class Activity {
     name:string;
     url:string;
@@ -22,7 +24,7 @@ const Square: React.FC<SquareProps> = (props) => {
         <div className="rounded bg-green-500">
             <Link to={props.url}>
                 <h2 className="text-white text-center text-xl">{props.name}</h2>
-                <img alt="thumbnail" src={props.image} width="200" height="200"></img>
+                <img className="object-right" alt="thumbnail" src={props.image} width="200" height="200"></img>
                 <p className="text-white text-center">{props.desc}</p>
             </Link>
         </div>
@@ -36,26 +38,35 @@ interface SquareProps {
     desc: string;
   }
 
-const Home = () => {
+interface HomeProps {
+    userID: string;
+    username: string;
+}
+
+const Home: React.FC<HomeProps> = (props) => {
     var activities: Activity[] = [];
     activities.push(new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!"))
+    activities.push(new Activity("My Favorite Tree", "/demo", favTreeIcon, "Tree Log!"))
+    activities.push(new Activity("Achievements", "/achievements", achievementsIcon, "View your progress!"))
+    activities.push(new Activity("Lesson- Tree Shapes", "/treeshapes", treeShapesIcon, "Tree shapes!"))
     return (
-        <>
-        <div className="flex items-center justify-center m-8">
-          <img alt="logo" src={Tree} className="m-0 w-20 h-50"></img>
-          <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
-            Evergreen
-          </h1>
-        </div>
-        <p className="text-xl m-10">{"Welcome " + username}</p>
-        <div className="flex m-10 gap-2">
-            {activities.map((activity) => {
-                return (
-                <Square name={activity.name} image={activity.image} url={activity.url} desc={activity.desc}/>
-                );
-            })}
-        </div>
-      </>
+        <div>
+            <div className="flex items-center justify-center m-8">
+            <img alt="logo" src={Tree} className="m-0 w-20 h-50"></img>
+            <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
+                Evergreen
+            </h1>
+            </div>
+            <p className="text-xl m-10">{"Welcome " + props.username}</p>
+            <div className="flex m-10 gap-2">
+                {activities.map((activity) => {
+                    return (
+                    <Square name={activity.name} image={activity.image} url={activity.url} desc={activity.desc}/>
+                    );
+                })}
+            </div>
+            <img alt="squirrel" className="absolute bottom-0 left-0 h-64 w-64" src={squirrelImage}></img>
+      </div>
     )
     };
 
