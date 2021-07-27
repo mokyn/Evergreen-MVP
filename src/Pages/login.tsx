@@ -7,10 +7,6 @@ import "../index.css";
 import GoogleButton from "react-google-button";
 import Tree from "../images/pinetree.svg";
 
-let username: string;
-let user;
-let userID: string;
-
 const handle_login = () => {
   firebase
     .auth()

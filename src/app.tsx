@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Game from "./Pages/bugGame";
 import "./index.css";
 import "./transitions.css";
@@ -9,6 +9,7 @@ import Login from "./Pages/login";
 import Home from "./Pages/home";
 import Achievements from "./Pages/achievements";
 import TreeJournal from "./Pages/treeJournal";
+import TreeShapes from "./Pages/treeShapes";
 import { AnimatedSwitch } from 'react-router-transition';
 
 const App: React.FC = () => {
@@ -52,6 +53,7 @@ const App: React.FC = () => {
           <Achievements userID={userID} username={username}/>
         </Route>
         <Route exact path="/help" component={Help} />
+        <Route exact path="/treeshapes" component={TreeShapes} />
         <Route exact path="/demo" component={TreeJournal} />
       </AnimatedSwitch>
       }

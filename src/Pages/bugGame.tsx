@@ -7,6 +7,7 @@ import slugImg from "../images/slug.png";
 import backgroundImg from "../images/background.jpg";
 import { firestore } from "../firebase";
 import "../index.css";
+import ProgressBar from "../Components/ProgressBar";
 
 // number of bad bugs to be clicked to win the game
 const TARGET_CORRECT_GUESSES: number = 15;
@@ -195,55 +196,6 @@ const BUGS: { [key: string]: BugItem } = {
 };
 
 const bugTypes = Object.keys(BUGS);
-
-interface ProgressBarProps {
-  barLength: number;
-  progressPercent: number;
-}
-
-const ProgressBar: React.FC<ProgressBarProps> = (props) => {
-  const [progressBarLength, setProgresBarLength] = useState(0);
-
-  // runs every time the component rerenders
-  useEffect(() => {
-    setProgresBarLength(props.progressPercent * props.barLength);
-  }, [props.progressPercent]);
-
-  // const progressBarContainerStyle = {
-  //   Position: "absolute",
-  //   left: "100px",
-  //   top: "100px",
-  //   display: "flex",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   ZIndex: "10",
-  // };
-
-  const progressBarStyle = {
-    backgroundColor: "rgb(233, 233, 233)",
-    borderRadius: "0.5rem",
-    width: `${props.barLength}px`,
-  };
-
-  const filledProgressBarStyle = {
-    backgroundColor: "rgb(62, 122, 235)",
-    height: "10px",
-    borderRadius: "1rem",
-    width: `${progressBarLength}px`,
-    // animation
-    transition: "1s ease",
-  };
-
-  return (
-    <div className="absolute top-16 left-16 z-10">
-      <div style={progressBarStyle}>
-        <div style={filledProgressBarStyle} />
-      </div>
-    </div>
-  );
-};
-
-
 interface GameProps {
   userID: string;
   username: string;
@@ -287,7 +239,7 @@ const Game: React.FC<GameProps> = (props) => {
         setCorrectBugs(doc.data().Progress);
       }
     })
-  },[])
+  },[props.userID])
 
   // component did mount
   useEffect(() => {
@@ -333,7 +285,7 @@ const Game: React.FC<GameProps> = (props) => {
       if (!BUGS[bugType].isFriendly) {
         if (!hasWon) {
           setCorrectBugs((prevState) => {return prevState+1});
-          if (correctBugs+1==TARGET_CORRECT_GUESSES) {
+          if (correctBugs+1===TARGET_CORRECT_GUESSES) {
             setHasWon(true);
           }
         }
@@ -391,8 +343,9 @@ const Game: React.FC<GameProps> = (props) => {
         hasWon={hasWon}
         onClick={() => toggleModal()}
       />
-
-      <ProgressBar barLength={400} progressPercent={correctBugs / TARGET_CORRECT_GUESSES} />
+      <div className="absolute top-16 left-16 z-10">
+        <ProgressBar barLength={400} progressPercent={correctBugs / TARGET_CORRECT_GUESSES} />
+      </div>
 
       <div className="absolute top-0 left-0 z-10">
         <svg className="w-screen h-screen">

@@ -3,8 +3,8 @@ import Tree from "../images/pinetree.svg";
 import bugGameIcon from "../images/bg.jpg"
 import squirrelImage from "../images/squirrel.png"
 import favTreeIcon from "../images/favTree2.png"
-import achievementsIcon from "../images/achievements.gif"
-
+import achievementsIcon from "../images/achievements.jpg"
+import treeShapesIcon from "../images/treeShapesIcon.jpg"
 class Activity {
     name:string;
     url:string;
@@ -48,7 +48,7 @@ const Home: React.FC<HomeProps> = (props) => {
     activities.push(new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!"))
     activities.push(new Activity("My Favorite Tree", "/demo", favTreeIcon, "Tree Log!"))
     activities.push(new Activity("Achievements", "/achievements", achievementsIcon, "View your progress!"))
-
+    activities.push(new Activity("Lesson- Tree Shapes", "/treeshapes", treeShapesIcon, "Tree shapes!"))
     return (
         <div>
             <div className="flex items-center justify-center m-8">
@@ -65,7 +65,7 @@ const Home: React.FC<HomeProps> = (props) => {
                     );
                 })}
             </div>
-            <img className="absolute bottom-0 left-0 h-64 w-64" src={squirrelImage}></img>
+            <img alt="squirrel" className="absolute bottom-0 left-0 h-64 w-64" src={squirrelImage}></img>
       </div>
     )
     };
