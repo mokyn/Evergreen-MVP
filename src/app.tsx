@@ -54,7 +54,9 @@ const App: React.FC = () => {
         </Route>
         <Route exact path="/help" component={Help} />
         <Route exact path="/treeshapes" component={TreeShapes} />
-        <Route exact path="/demo" component={FavTrees} />
+        <Route exact path="/demo">
+          <FavTrees userID={userID} username={username}/>
+        </Route>
       </AnimatedSwitch>
       }
     </Router>

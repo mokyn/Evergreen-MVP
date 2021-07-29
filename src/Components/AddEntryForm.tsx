@@ -9,6 +9,7 @@ interface AddEntryFormProps {
   nextEntryNum: number;
   setNextEntryNum: React.Dispatch<React.SetStateAction<number>>;
   favTreeId: string;
+  userID: string;
 }
 
 export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
@@ -44,7 +45,7 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
     }
 
     const imageRef = storage.ref(
-      `htoo/favTrees/${props.favTreeId}/entry${props.nextEntryNum}`
+      props.userID+`/favTrees/${props.favTreeId}/entry${props.nextEntryNum}`
     );
 
     const options = {
@@ -76,7 +77,7 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
    */
   const onSubmit = () => {
     const favTreesRef = firestore.collection(
-      `users/htoo/favTrees/${props.favTreeId}/entries`
+      `users/`+props.userID+`/favTrees/${props.favTreeId}/entries`
     ); // awesome: '/entries' collection doesn't exist yet but automatically gets added
     favTreesRef
       .doc(`entry${props.nextEntryNum}`)

@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
-import Tree from "../images/pinetree.svg";
 import bugGameIcon from "../images/bg.jpg"
 import squirrelImage from "../images/squirrel.png"
 import favTreeIcon from "../images/favTree2.png"
 import achievementsIcon from "../images/achievements.jpg"
 import treeShapesIcon from "../images/treeShapesIcon.jpg"
+import PageProps from "../Components/PageProps";
+import Title from "../Components/Title";
+import firebase from "firebase/app";
+
 class Activity {
     name:string;
     url:string;
@@ -38,12 +41,7 @@ interface SquareProps {
     desc: string;
   }
 
-interface HomeProps {
-    userID: string;
-    username: string;
-}
-
-const Home: React.FC<HomeProps> = (props) => {
+const Home: React.FC<PageProps> = (props) => {
     var activities: Activity[] = [];
     activities.push(new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!"))
     activities.push(new Activity("My Favorite Tree", "/demo", favTreeIcon, "Tree Log!"))
@@ -51,12 +49,12 @@ const Home: React.FC<HomeProps> = (props) => {
     activities.push(new Activity("Lesson- Tree Shapes", "/treeshapes", treeShapesIcon, "Tree shapes!"))
     return (
         <div>
-            <div className="flex items-center justify-center m-8">
-            <img alt="logo" src={Tree} className="m-0 w-20 h-50"></img>
-            <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
-                Evergreen
-            </h1>
-            </div>
+            <Title/>
+            <button className="z-20 absolute top-4 right-8 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+                    type="button"
+                    onClick={()=>{firebase.auth().signOut()}}>
+                Log Out
+                </button>
             <p className="text-xl m-10">{"Welcome " + props.username}</p>
             <div className="flex m-10 gap-2">
                 {activities.map((activity) => {

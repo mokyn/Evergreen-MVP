@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { firestore } from "../firebase";
 import gold from "../images/gold.png";
 import silver from "../images/silver.png";
 import bronze from "../images/bronze.png";
 import ProgressBar from "../Components/ProgressBar";
+import PageProps from "../Components/PageProps";
+import HomeButton from "../Components/HomeButton";
 
 const medalImage = (medal) => {
     var i;
@@ -23,12 +24,7 @@ const medalImage = (medal) => {
     )
 }
 
-interface AchievementsProps {
-    userID: string;
-    username: string;
-}
-
-const Achievements: React.FC<AchievementsProps> = (props) => {
+const Achievements: React.FC<PageProps> = (props) => {
     const [medals, setMedals] = useState<String[][]>([])
     const [progress, setProgress] = useState(0);
     useEffect(() => {
@@ -37,6 +33,7 @@ const Achievements: React.FC<AchievementsProps> = (props) => {
           .get()
           .then((snapshot) => {
             setMedals(snapshot.docs.map((doc) => [doc.id, doc.data().medal]));
+            console.log(snapshot.docs.map((doc) => [doc.id, doc.data().medal]));
           })
       }, [props.userID]);
 
@@ -53,9 +50,7 @@ const Achievements: React.FC<AchievementsProps> = (props) => {
 
     return (
         <div>
-            <Link to="/home" className="z-20 absolute top-4 left-8">
-                <button className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="button">Home</button>
-            </Link>
+            <HomeButton/>
             <h1 className="m-8 font-custom text-green-500 font-bold text-5xl text-center">Achievements</h1>
             <div className="m-10 grid grid-cols-10 gap-10">
                 {medals.map(medalImage)}

@@ -4,8 +4,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import { Link } from "react-router-dom";
 import "../index.css";
-import GoogleButton from "react-google-button";
-import Tree from "../images/pinetree.svg";
+import GoogleButton from "react-google-button";import Title from "../Components/Title";
 
 const handle_login = () => {
   firebase
@@ -16,12 +15,7 @@ const handle_login = () => {
 const Login = () => {
     return (
       <div>
-        <div className="flex items-center justify-center m-8">
-          <img src={Tree} alt="logo" className="m-0 w-20 h-50"></img>
-          <h1 className="m-0 font-custom text-green-500	font-bold text-5xl">
-            Evergreen
-          </h1>
-        </div>
+        <Title/>
         <div className="grid justify-items-center">
           <GoogleButton onClick={handle_login} />
         </div>

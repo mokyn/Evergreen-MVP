@@ -7,6 +7,7 @@ interface AddTreeFormProps {
   onToggleForm: () => void;
   nextTreeNum: number;
   setNextTreeId: React.Dispatch<React.SetStateAction<number>>;
+  userID: string;
 }
 
 export const AddTreeForm: React.FC<AddTreeFormProps> = (props) => {
@@ -35,7 +36,7 @@ export const AddTreeForm: React.FC<AddTreeFormProps> = (props) => {
       return;
     }
 
-    const imageRef = storage.ref(`htoo/favTrees/favTree${props.nextTreeNum}`);
+    const imageRef = storage.ref(props.userID+`/favTrees/favTree${props.nextTreeNum}`);
 
     const options = {
       maxSizeMB: 1,
@@ -64,7 +65,7 @@ export const AddTreeForm: React.FC<AddTreeFormProps> = (props) => {
    * write to Firestore with data from form inputs
    */
   const onSubmit = () => {
-    const favTreesRef = firestore.collection("users/htoo/favTrees");
+    const favTreesRef = firestore.collection("users/"+props.userID+"/favTrees");
     favTreesRef
       .doc(`favTree${props.nextTreeNum}`)
       .set({

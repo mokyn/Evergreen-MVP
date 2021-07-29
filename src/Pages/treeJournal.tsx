@@ -4,11 +4,13 @@ import HorizontalCard from "../Components/HorizontalCard";
 import { firestore, storage } from "../firebase";
 import { useParams } from "react-router-dom";
 import { AddEntryForm } from "../Components/AddEntryForm";
+import PageProps from "../Components/PageProps";
 
 interface RenderedEntriesProps {
   existingEntries: firebase.firestore.DocumentData[];
   showMoreClickCount: number;
   favTreeId: string;
+  userID: string;
 }
 
 const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
@@ -18,10 +20,10 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
 
   const handleDelete = (entryId: string) => {
     const entryRef = firestore.doc(
-      `users/htoo/favTrees/${props.favTreeId}/entries/entry${entryId}`
+      `users/${props.userID}/favTrees/${props.favTreeId}/entries/entry${entryId}`
     );
     const entryImgRef = storage.ref(
-      `htoo/favTrees/${props.favTreeId}/entry${entryId}`
+      `${props.userID}/favTrees/${props.favTreeId}/entry${entryId}`
     );
 
     entryRef
@@ -46,7 +48,7 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
   useEffect(() => {
     const grabImgURL = async (entryId: string) => {
       const imgRef = storage.ref(
-        `htoo/favTrees/${props.favTreeId}/entry${entryId}`
+        `${props.userID}/favTrees/${props.favTreeId}/entry${entryId}`
       );
       return await imgRef.getDownloadURL();
     };
@@ -61,7 +63,7 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
         });
         return null;
       });
-  }, [props.existingEntries, end, props.favTreeId]);
+  }, [props.existingEntries, end, props.favTreeId, props.userID]);
 
   return (
     <div>
@@ -86,7 +88,7 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
   );
 };
 
-const TreeJournal: React.FC = () => {
+const TreeJournal: React.FC<PageProps> = (props) => {
   const [showForm, setShowForm] = useState(false);
 
   const [existingEntries, setExistingEntries] = useState<
@@ -110,14 +112,14 @@ const TreeJournal: React.FC = () => {
     // console.log("useEffect run");
     // reads the existing entries from firestore, renders them, sets nextEntryNum
     firestore
-      .collection(`users/htoo/favTrees/${favTreeId}/entries`)
+      .collection(`users/${props.userID}/favTrees/${favTreeId}/entries`)
       .onSnapshot((snapshot) => {
         // existingEntries state only update after adding new entry; api call is efficient
         // renderedEntries render existingEntries based on showMoreClickCount (doesn't call api again)
         const existingEntriesArray = snapshot.docs.map((doc) => doc.data());
         setExistingEntries(existingEntriesArray.reverse()); // reversed to show latest entry on top
       });
-  }, [favTreeId]);
+  }, [favTreeId, props.userID]);
 
   // a separate useEffect to set the next entry num which depends on the last entry of existingEntries state array
   useEffect(() => {
@@ -147,6 +149,7 @@ const TreeJournal: React.FC = () => {
           nextEntryNum={nextEntryNum}
           setNextEntryNum={setNextEntryNum}
           favTreeId={favTreeId}
+          userID={props.userID}
         />
         <div className="flex justify-center items-center mt-12">
           <button
@@ -161,6 +164,7 @@ const TreeJournal: React.FC = () => {
           existingEntries={existingEntries}
           showMoreClickCount={showMoreClickCount}
           favTreeId={favTreeId}
+          userID={props.userID}
         />
         <div className="flex flex-col gap-2 justify-center items-center mb-12">
           <button
