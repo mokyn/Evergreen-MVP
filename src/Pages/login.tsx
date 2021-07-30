@@ -20,12 +20,6 @@ const Login = () => {
           <GoogleButton onClick={handle_login} />
         </div>
         <div className="grid justify-items-stretch">
-          <Link
-            className="m-2 justify-self-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            to="/home"
-          >
-            Go
-          </Link>
         </div>
       </div>
     )

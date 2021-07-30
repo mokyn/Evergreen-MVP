@@ -23,8 +23,6 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
   const { url } = useRouteMatch();
   const [imgUrl, setImgUrl] = useState<{ [key: string]: string }>({});
 
-  //   console.log(url) = '/fav-tree/'
-
   // listen to changes in firestore database
   useEffect(() => {
     firestore.collection(`users/${props.userID}/favTrees`).onSnapshot((snapshot) => {
@@ -44,6 +42,12 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
     }
   }, [existingTrees, props.userID]);
 
+  // grabs img from Storage
+  const grabImgURL = async (favTreeId: number) => {
+    const imgRef = storage.ref(`${props.userID}/favTrees/favTree${favTreeId}`);
+    return await imgRef.getDownloadURL();
+  };
+
   // grabs images for trees and set the imgUrl state
   useEffect(() => {
     existingTrees.map((existingTree: firebase.firestore.DocumentData) => {
@@ -54,16 +58,10 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
       });
       return null;
     });
-  }, [existingTrees]);
+  }, []);
 
   const handleToggleForm = () => {
     setIsFormShown((prevState) => !prevState);
-  };
-
-  // grabs img from Storage
-  const grabImgURL = async (favTreeId: number) => {
-    const imgRef = storage.ref(`${props.userID}/favTrees/favTree${favTreeId}`);
-    return await imgRef.getDownloadURL();
   };
 
   const handleDelete = (treeId: string) => {
@@ -71,6 +69,24 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
     console.log(`${props.userID}/favTrees/${treeId}`)
     const treeRef = firestore.doc(`users/${props.userID}/favTrees/${treeId}`);
     const treeImgRef = storage.ref(`${props.userID}/favTrees/${treeId}`);
+
+    firestore
+    .collection(`users/${props.userID}/favTrees/${treeId}/entries`)
+    .onSnapshot((snapshot) => {
+      for (let i=0; i<snapshot.docs.length;i++) {
+        const entryRef = firestore.doc(
+          `users/${props.userID}/favTrees/${treeId}/entries/entry${i}`
+        );
+        entryRef
+        .delete()
+        .then(() => {
+          console.log("successfully deleted");
+        })
+        .catch((error) => {
+          console.log("Uh oh, couldn't delete!");
+        });
+      }
+    });
 
     treeRef
       .delete()
@@ -93,7 +109,9 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
 
   return (
     <>
-      <HomeButton/>
+      <button onClick={()=>window.location.reload()}>
+        <HomeButton/>
+      </button>
       <AddTreeForm
         isFormShown={isFormShown}
         onToggleForm={handleToggleForm}
@@ -103,11 +121,12 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
       />
       <div className="main-container flex flex-col justify-center items-center h-screen w-screen gap-12">
         <div className="menu-container flex flex-row justify-center gap-12">
+          <ol className="list-none">
           {existingTrees.map(
             (existingTree: firebase.firestore.DocumentData) => {
               return (
-                <>
-                  <div className="flex flex-col items-center justify-center gap-0">
+                <li key={existingTree.favTreeId}>
+                  <div className="flex flex-col items-center justify-center gap-0" >
                     <Link
                       to={`${url}/favTree${existingTree.favTreeId}`}
                       key={existingTree.favTreeId}
@@ -115,6 +134,7 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
                       <FavTreeCard
                         imgUrl={imgUrl[`favTree${existingTree.favTreeId}`]}
                         cardTitle={existingTree.name}
+                        key={existingTree.favTreeId}
                       />
                     </Link>
                     <button
@@ -126,10 +146,11 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
                       Delete
                     </button>
                   </div>
-                </>
+                </li>
               );
             }
           )}
+          </ol>
         </div>
         <div>
           <button

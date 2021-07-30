@@ -30,6 +30,12 @@ const App: React.FC = () => {
     }
   })
 
+  const HandleLogout = () => {
+    firebase.auth().signOut()
+    setUsername("")
+    setUserID("")
+  }
+
   return (
     <Router>
       {(!username || !userID) ?
@@ -41,10 +47,10 @@ const App: React.FC = () => {
             atActive={{ opacity: 1 }}
             className="switch-wrapper">
         <Route exact path="/">
-          <Home userID={userID} username={username}/>
+          <Home userID={userID} username={username} handleLogout={HandleLogout}/>
         </Route>
         <Route exact path="/home">
-          <Home userID={userID} username={username}/>
+          <Home userID={userID} username={username} handleLogout={HandleLogout}/>
         </Route>
         <Route exact path="/game">
           <Game userID={userID} username={username}/>
@@ -54,7 +60,7 @@ const App: React.FC = () => {
         </Route>
         <Route exact path="/help" component={Help} />
         <Route exact path="/treeshapes" component={TreeShapes} />
-        <Route exact path="/demo">
+        <Route exact path="/my-favorite-tree">
           <FavTrees userID={userID} username={username}/>
         </Route>
       </AnimatedSwitch>
