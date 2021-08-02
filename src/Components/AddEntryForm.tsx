@@ -19,6 +19,7 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
   const [date, setDate] = useState("");
   const [image, setImage] = useState<File>();
   const [uploadStatus, setUploadStatus] = useState("Not started");
+  const [checkboxes, setCheckBoxes] = useState([false,false,false,false,false,false,false]);
 
   // TODO: find out what type event is
   const handleTitleChange = (event: any) => {
@@ -31,6 +32,13 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
 
   const handleDateChange = (event: any) => {
     setDate(event.target.value);
+  };
+
+  const handleCheck = (event: any) => {
+    var changed = checkboxes;
+    changed[event.target.id]=event.target.checked;
+    setCheckBoxes(changed)
+    console.log(checkboxes)
   };
 
   const handleImage = (event: any) => {
@@ -85,6 +93,7 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
         Body: body,
         Title: title,
         Date: date,
+        Checks: checkboxes,
         entryId: props.nextEntryNum,
       })
       .then(() => {
@@ -95,11 +104,6 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
         props.onToggleForm();
       });
 
-    // NOT A FUNCTION ERROR TS
-    const sayHello = firebase.functions().httpsCallable("sayHello");
-    sayHello({ name: "htoo" }).then((result: any) => {
-      console.log(result.data);
-    });
   };
 
   if (props.showForm) {
@@ -121,7 +125,7 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
               </div>
               {/*body*/}
               <form action="" className="flex flex-col gap-4 m-5">
-                <div className="mb-4">
+                <div className="mb-0">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
                     htmlFor="title"
@@ -137,7 +141,7 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
                     onChange={handleTitleChange}
                   />
                 </div>
-                <div className="mb-4">
+                <div className="mb-0">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
                     htmlFor="body"
@@ -155,7 +159,41 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
                     onChange={handleBodyChange}
                   ></textarea>
                 </div>
-                <div className="mb-4">
+                <div className="flex flex-col">
+                  <div className="grid grid-cols-4 mb-2">
+                    <div className="flex flex-row">
+                      <input className="m-2" type="checkbox" id="0" name="leafColor" value="leafColor" onChange={handleCheck}></input>
+                      <label htmlFor="leafColor">Did the leaves change color since last time?</label>
+                    </div>
+                    <div className="flex flex-row">
+                      <input className="m-2" type="checkbox" id="1" name="bugs" value="bugs" onChange={handleCheck}></input>
+                      <label htmlFor="leafColor">Do you see any bugs in the tree?</label>
+                    </div>
+                    <div className="flex flex-row">
+                      <input className="m-2" type="checkbox" id="2" name="birds" value="birds" onChange={handleCheck}></input>
+                      <label htmlFor="leafColor">Do you see any birds or animals?</label>
+                    </div>
+                    <div className="flex flex-row">
+                      <input className="m-2" type="checkbox" id="3" name="loseLeaves" value="loseLeaves" onChange={handleCheck}></input>
+                      <label htmlFor="leafColor">Did your tree lose its leaves?</label>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 mb-2">
+                    <div className="flex flex-row">
+                    <input className="m-2" type="checkbox" id="4" name="newLeaves" value="newLeaves" onChange={handleCheck}></input>
+                    <label htmlFor="leafColor">Do you see any new leaves or flowers?</label>
+                    </div>
+                    <div className="flex flex-row">
+                    <input className="m-2" type="checkbox" id="5" name="brokenBranches" value="brokenBranches" onChange={handleCheck}></input>
+                    <label htmlFor="leafColor">Any broken branches?</label>
+                    </div>
+                    <div className="flex flex-row">
+                    <input className="m-2" type="checkbox" id="6" name="holes" value="holes" onChange={handleCheck}></input>
+                    <label htmlFor="leafColor">Any holes in the tree?</label>
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-0">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
                     htmlFor="date"

@@ -7,6 +7,7 @@ import treeShapesIcon from "../images/treeShapesIcon.jpg"
 import Title from "../Components/Title";
 
 class Activity {
+//create an activity object for each activity linked from the home page
     name:string;
     url:string;
     image:string;
@@ -62,16 +63,17 @@ const Home: React.FC<HomeProps> = (props) => {
             <p className="text-xl m-10">{"Welcome " + props.username}</p>
             <div className="flex m-10 gap-2 list-none">
                 {activities.map((activity) => {
+                    //return a square for each activity in the activity list
                     return (
-                    <li key={activity.name}>
-                        <Square name={activity.name} image={activity.image} url={activity.url} desc={activity.desc}/>
-                    </li>
+                        <li key={activity.name}>
+                            <Square name={activity.name} image={activity.image} url={activity.url} desc={activity.desc}/>
+                        </li>
                         );
                     })}
             </div>
             <img alt="squirrel" className="absolute bottom-0 left-0 h-64 w-64" src={squirrelImage}></img>
       </div>
     )
-    };
+};
 
 export default Home;

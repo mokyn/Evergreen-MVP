@@ -77,6 +77,7 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
                 header={exisitingEntry.Title}
                 body={exisitingEntry.Body}
                 date={exisitingEntry.Date}
+                checks={exisitingEntry.Checks}
                 onDelete={() => {
                   handleDelete(exisitingEntry.entryId);
                 }}
@@ -91,9 +92,8 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
 const TreeJournal: React.FC<PageProps> = (props) => {
   const [showForm, setShowForm] = useState(false);
 
-  const [existingEntries, setExistingEntries] = useState<
-    firebase.firestore.DocumentData[]
-  >([]); // existingEntries cannot be initialized as just any array so I grabbed the specific array type from the eslint error popup
+  const [existingEntries, setExistingEntries] = useState<firebase.firestore.DocumentData[]>([]); 
+  // existingEntries cannot be initialized as just any array so I grabbed the specific array type from the eslint error popup
 
   const [nextEntryNum, setNextEntryNum] = useState(0); // nextEntryNum is passed into child component and also updated from the child component
   const [showMoreClickCount, setShowMoreClickCount] = useState(1); // number of times show more has been clicked
@@ -109,7 +109,6 @@ const TreeJournal: React.FC<PageProps> = (props) => {
   const { favTreeId } = useParams(); // grabs the favTreeId from URL
 
   useEffect(() => {
-    // console.log("useEffect run");
     // reads the existing entries from firestore, renders them, sets nextEntryNum
     firestore
       .collection(`users/${props.userID}/favTrees/${favTreeId}/entries`)
@@ -129,16 +128,6 @@ const TreeJournal: React.FC<PageProps> = (props) => {
       setNextEntryNum(existingEntries[0].entryId + 1);
     }
   }, [existingEntries]);
-
-  //   const getAge = () => {
-  //     const docRef = firestore.doc("users/htoo");
-  //     docRef.get().then((doc) => {
-  //       if (doc && doc.exists) {
-  //         const userData = doc.data();
-  //         setTempArray(userData.age);
-  //       }
-  //     });
-  //   }; just sample code for reading from firestore
 
   return (
     <>

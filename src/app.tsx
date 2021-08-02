@@ -18,26 +18,27 @@ const App: React.FC = () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       if (user.displayName) {
-        setUsername(user.displayName)
+        setUsername(user.displayName);
       }
       if (user.uid) {
-        setUserID(user.uid)
+        setUserID(user.uid);
       }
-      console.log(username,userID)
+      console.log("Successfully logged in.",username,userID);
     }
     else {
-      console.log("Not logged in.")
+      console.log("Not logged in.");
     }
   })
 
-  const HandleLogout = () => {
-    firebase.auth().signOut()
-    setUsername("")
-    setUserID("")
-  }
+  const handleLogout = () => {
+    firebase.auth().signOut();
+    setUsername("");
+    setUserID("");
+  };
 
   return (
     <Router>
+      {/*if the user is not logged in, display the login page*/}
       {(!username || !userID) ?
       <Login/>
       :
@@ -47,10 +48,10 @@ const App: React.FC = () => {
             atActive={{ opacity: 1 }}
             className="switch-wrapper">
         <Route exact path="/">
-          <Home userID={userID} username={username} handleLogout={HandleLogout}/>
+          <Home userID={userID} username={username} handleLogout={handleLogout}/>
         </Route>
         <Route exact path="/home">
-          <Home userID={userID} username={username} handleLogout={HandleLogout}/>
+          <Home userID={userID} username={username} handleLogout={handleLogout}/>
         </Route>
         <Route exact path="/game">
           <Game userID={userID} username={username}/>

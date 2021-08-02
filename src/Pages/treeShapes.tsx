@@ -1,9 +1,9 @@
 
 import { Link } from "react-router-dom";
-import triangle1 from "../images/TreeShapes/Picture1.png"
-import triangle2 from "../images/TreeShapes/Picture2.png"
-import triangle3 from "../images/TreeShapes/Picture3.png"
-import triangle4 from "../images/TreeShapes/Picture4.png"
+import triangle1 from "../images/TreeShapes/Picture1.png";
+import triangle2 from "../images/TreeShapes/Picture2.png";
+import triangle3 from "../images/TreeShapes/Picture3.png";
+import triangle4 from "../images/TreeShapes/Picture4.png";
 
 
 const TreeShapes = () => {

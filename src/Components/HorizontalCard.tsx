@@ -5,10 +5,18 @@ interface horizontalCardProps {
   header: string;
   body: string;
   date: string;
+  checks: boolean[];
   onDelete: () => void;
 }
 
 const HorizontalCard: React.FC<horizontalCardProps> = (props) => {
+  let descriptions = ["Leaves changed", "Bugs present", "Birds present", "Leaves lost", "New leaves/flowers", "Has broken branches", "Has holes"]
+  let checkDesc:string[] = []
+  for (let i=0; i<7; i++) {
+    if (props.checks[i]) {
+      checkDesc.push(descriptions[i])
+    }
+  }
   return (
     <div className="flex flex-row gap-4 max-w-screen-md m-6">
       <div className="">
@@ -22,6 +30,9 @@ const HorizontalCard: React.FC<horizontalCardProps> = (props) => {
         <p className="px-6 py-4 mt-2">{props.header}</p>
         <p className="px-6 py-2">{props.date}</p>
         <p className="px-6 py-2">{props.body}</p>
+        <ul className="ml-4 px-6 py-2 list-disc text-xs">
+          {checkDesc.map((desc)=>{return (<li>{desc}</li>)})}
+        </ul>
         <div className="flex justify-end items-end mx-6 py-4">
           <button
             onClick={props.onDelete}
