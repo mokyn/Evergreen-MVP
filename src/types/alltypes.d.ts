@@ -1,6 +1,7 @@
 declare module "react-router";
 declare module "history";
 declare module "react-router-dom";
+declare module "react-beautiful-dnd";
 
 // images
 declare module "*.png";
