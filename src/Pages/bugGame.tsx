@@ -217,29 +217,31 @@ const Game: React.FC<GameProps> = (props) => {
   // also sets the id for a newest spawned bug
   const numSpawnedBugs = useRef(0);
 
-  const save_progress = ()=>{
+  const save_progress = () => {
     const progressRef = firestore.collection(
-      "users/"+props.userID+"/progress"
+      "users/" + props.userID + "/progress"
     );
     progressRef
-      .doc('bugGame')
+      .doc("bugGame")
       .set({
         Progress: correctBugs,
       })
       .then(() => {
-        console.log("Progress Saved")
-      })
-  }
+        console.log("Progress Saved");
+      });
+  };
 
   useEffect(() => {
-    firestore.collection("users/"+props.userID+"/progress").doc("bugGame")
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        setCorrectBugs(doc?.data()?.Progress);
-      }
-    })
-  },[props.userID])
+    firestore
+      .collection("users/" + props.userID + "/progress")
+      .doc("bugGame")
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setCorrectBugs(doc?.data()?.Progress);
+        }
+      });
+  }, [props.userID]);
 
   // component did mount
   useEffect(() => {
@@ -284,13 +286,15 @@ const Game: React.FC<GameProps> = (props) => {
     if (BUGS[bugType]) {
       if (!BUGS[bugType].isFriendly) {
         if (!hasWon) {
-          setCorrectBugs((prevState) => {return prevState+1});
-          if (correctBugs+1===TARGET_CORRECT_GUESSES) {
+          setCorrectBugs((prevState) => {
+            return prevState + 1;
+          });
+          if (correctBugs + 1 === TARGET_CORRECT_GUESSES) {
             setHasWon(true);
           }
         }
       }
-      }
+    }
 
     // removes the bug from bugIds array so that it is no longer rendered
     let newBugs = bugIds;
@@ -322,15 +326,17 @@ const Game: React.FC<GameProps> = (props) => {
   return (
     <>
       <Link to="/home" className="z-20 absolute top-4 left-8">
-        <button onClick={save_progress}
+        <button
+          onClick={save_progress}
           className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
           type="button"
         >
           Home
         </button>
       </Link>
-      <Link to="/help" className="z-20 absolute top-4 right-8">
+      <Link to="/buglesson" className="z-20 absolute top-4 right-8">
         <button
+          onClick={save_progress}
           className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
           type="button"
         >
@@ -344,7 +350,10 @@ const Game: React.FC<GameProps> = (props) => {
         onClick={() => toggleModal()}
       />
       <div className="absolute top-16 left-16 z-10">
-        <ProgressBar barLength={400} progressPercent={correctBugs / TARGET_CORRECT_GUESSES} />
+        <ProgressBar
+          barLength={400}
+          progressPercent={correctBugs / TARGET_CORRECT_GUESSES}
+        />
       </div>
 
       <div className="absolute top-0 left-0 z-10">
