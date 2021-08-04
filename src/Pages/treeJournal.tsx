@@ -4,7 +4,7 @@ import HorizontalCard from "../Components/HorizontalCard";
 import { firestore, storage } from "../firebase";
 import { useParams } from "react-router-dom";
 import { AddEntryForm } from "../Components/AddEntryForm";
-import PageProps from "../Components/PageProps";
+import PageProps from "../types/PageProps";
 
 interface RenderedEntriesProps {
   existingEntries: firebase.firestore.DocumentData[];

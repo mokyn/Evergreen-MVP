@@ -11,7 +11,7 @@ import FavTreeCard from "../Components/FavTreeCard";
 import TreeJournal from "./treeJournal";
 import { AddTreeForm } from "../Components/AddTreeForm";
 import HomeButton from "../Components/HomeButton";
-import PageProps from "../Components/PageProps";
+import PageProps from "../types/PageProps";
 import { AnimatedSwitch } from 'react-router-transition';
 
 const FavTreesMenu: React.FC<PageProps> = (props) => {

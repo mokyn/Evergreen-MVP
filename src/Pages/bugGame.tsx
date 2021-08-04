@@ -8,6 +8,9 @@ import backgroundImg from "../images/background.jpg";
 import { firestore } from "../firebase";
 import "../index.css";
 import ProgressBar from "../Components/ProgressBar";
+import saveProgress from "../Functions/saveProgress";
+import addMedal from "../Functions/addMedal";
+import PageProps from "../types/PageProps";
 
 // number of bad bugs to be clicked to win the game
 const TARGET_CORRECT_GUESSES: number = 15;
@@ -196,13 +199,9 @@ const BUGS: { [key: string]: BugItem } = {
 };
 
 const bugTypes = Object.keys(BUGS);
-interface GameProps {
-  userID: string;
-  username: string;
-}
 
 // main parent component
-const Game: React.FC<GameProps> = (props) => {
+const Game: React.FC<PageProps> = (props) => {
   // define states using state hook
   // typescript implicitly knows the type of each state from initial value
   const [showModal, setShowModal] = useState(false);
@@ -217,26 +216,12 @@ const Game: React.FC<GameProps> = (props) => {
   // also sets the id for a newest spawned bug
   const numSpawnedBugs = useRef(0);
 
-  const save_progress = ()=>{
-    const progressRef = firestore.collection(
-      "users/"+props.userID+"/progress"
-    );
-    progressRef
-      .doc('bugGame')
-      .set({
-        Progress: correctBugs,
-      })
-      .then(() => {
-        console.log("Progress Saved")
-      })
-  }
-
   useEffect(() => {
     firestore.collection("users/"+props.userID+"/progress").doc("bugGame")
     .get()
     .then((doc) => {
       if (doc.exists) {
-        setCorrectBugs(doc?.data()?.Progress);
+    setCorrectBugs(doc?.data()?.Progress);
       }
     })
   },[props.userID])
@@ -318,11 +303,22 @@ const Game: React.FC<GameProps> = (props) => {
     return bugTypes[randomBugTypeIndex];
   };
 
+  const handleQuit = () => {
+    saveProgress("bugGame",props.userID,correctBugs)
+    if (correctBugs===15) {
+      addMedal("bugGame",props.userID,"gold")
+    } else if (correctBugs>=10) {
+      addMedal("bugGame",props.userID,"silver")
+    } else if (correctBugs>=5) {
+      addMedal("bugGame",props.userID,"bronze")
+    }
+  }
+
   // render
   return (
     <>
       <Link to="/home" className="z-20 absolute top-4 left-8">
-        <button onClick={save_progress}
+        <button onClick={handleQuit}
           className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
           type="button"
         >

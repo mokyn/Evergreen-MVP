@@ -4,7 +4,7 @@ import gold from "../images/gold.png";
 import silver from "../images/silver.png";
 import bronze from "../images/bronze.png";
 import ProgressBar from "../Components/ProgressBar";
-import PageProps from "../Components/PageProps";
+import PageProps from "../types/PageProps";
 import HomeButton from "../Components/HomeButton";
 
 const medalImage = (medal) => {
