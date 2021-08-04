@@ -20,8 +20,10 @@ const BugLesson: React.FC<BugLessonProps> = (props) => {
   useEffect(() => {
     if (activePage === 0) {
       setIsFirstPage(true);
+      setIsLastPage(false);
     } else if (activePage === PAGE_NUMS.length - 1) {
       setIsLastPage(true);
+      setIsFirstPage(false);
     } else {
       setIsFirstPage(false);
       setIsLastPage(false);

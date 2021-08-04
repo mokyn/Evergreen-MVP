@@ -17,23 +17,11 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
   const [isFirstPage, setIsFirstPage] = useState(true);
   const [isLastPage, setIsLastPage] = useState(false); // these two states are used to conditionally render prev/ next buttons inside Card
 
-  // when card re-renders, check active page state and update other states accordingly
-  useEffect(() => {
-    if (activePage === 0) {
-      setIsFirstPage(true);
-    } else if (activePage === PAGE_NUMS.length - 1) {
-      setIsLastPage(true);
-    } else {
-      setIsFirstPage(false);
-      setIsLastPage(false);
-      return;
-    }
-  }, [activePage]);
-
   /**
    * checks from database if progress exists and applies it
    */
   useEffect(() => {
+    // TODO: updates the isfirstpage islastpage states from here
     firestore
       .collection("users/" + props.userID + "/progress")
       .doc("treeShapeLesson")
@@ -44,6 +32,21 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
         }
       });
   }, [props.userID]);
+
+  // when card re-renders, check active page state and update other states accordingly
+  useEffect(() => {
+    if (activePage === 0) {
+      setIsFirstPage(true);
+      setIsLastPage(false);
+    } else if (activePage === PAGE_NUMS.length - 1) {
+      setIsLastPage(true);
+      setIsFirstPage(false); // this might seem redundant but is actually necessary
+    } else {
+      setIsFirstPage(false);
+      setIsLastPage(false);
+      return;
+    }
+  }, [activePage]);
 
   /**
    * function that saves lesson progress to database
