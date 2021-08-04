@@ -55,7 +55,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = (props) => {
   var activities: Activity[] = [];
   activities.push(
-    new Activity("Bug Game", "/game", bugGameIcon, "Squash the bad bugs!")
+    new Activity("Bug Game", "/buggame", bugGameIcon, "Squash the bad bugs!")
   );
   activities.push(
     new Activity(
@@ -76,7 +76,7 @@ const Home: React.FC<HomeProps> = (props) => {
   activities.push(
     new Activity(
       "Lesson- Tree Shapes",
-      "/treeshapes",
+      "/treeshapelesson",
       treeShapesIcon,
       "Tree shapes!"
     )
