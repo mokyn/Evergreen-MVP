@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import React, { useEffect, useState } from "react";
-import HorizontalCard from "../Components/HorizontalCard";
+import HorizontalCard from "../Components/TreeEntryCard";
 import { firestore, storage } from "../firebase";
 import { useParams } from "react-router-dom";
 import { AddEntryForm } from "../Components/AddEntryForm";
@@ -92,7 +92,9 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
 const TreeJournal: React.FC<PageProps> = (props) => {
   const [showForm, setShowForm] = useState(false);
 
-  const [existingEntries, setExistingEntries] = useState<firebase.firestore.DocumentData[]>([]); 
+  const [existingEntries, setExistingEntries] = useState<
+    firebase.firestore.DocumentData[]
+  >([]);
   // existingEntries cannot be initialized as just any array so I grabbed the specific array type from the eslint error popup
 
   const [nextEntryNum, setNextEntryNum] = useState(0); // nextEntryNum is passed into child component and also updated from the child component

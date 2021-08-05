@@ -12,6 +12,7 @@ import Achievements from "./Pages/achievements";
 import { TreeShapeLesson } from "./Pages/treeShapeLesson";
 import { AnimatedSwitch } from "react-router-transition";
 import { TreeGame } from "./Pages/treeGame";
+import { TreeOrderGame } from "./Pages/treeOrderGame";
 
 const App: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -79,6 +80,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/treegame">
             <TreeGame userID={userID} />
+          </Route>
+          <Route exact path="/tree-order-game">
+            <TreeOrderGame userID={userID} username={username} />
           </Route>
         </AnimatedSwitch>
       )}
