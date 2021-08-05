@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import firebase from "firebase/app";
 import { firestore, storage } from "../firebase";
 import imageCompression from "browser-image-compression";
 

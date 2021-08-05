@@ -25,7 +25,7 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
     const entryImgRef = storage.ref(
       `${props.userID}/favTrees/${props.favTreeId}/entry${entryId}`
     );
-
+    //delete entry
     entryRef
       .delete()
       .then(() => {
@@ -34,6 +34,7 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
       .catch((error) => {
         console.log("Uh oh, couldn't delete!");
       });
+    //delete image
     entryImgRef
       .delete()
       .then(() => {
@@ -66,23 +67,25 @@ const RenderedEntries: React.FC<RenderedEntriesProps> = (props) => {
   }, [props.existingEntries, end, props.favTreeId, props.userID]);
 
   return (
-    <div>
+    <div className="list-none">
       {props.existingEntries
         .slice(start, end)
         .map((exisitingEntry: firebase.firestore.DocumentData) => {
           return (
-            <div className="flex flex-col gap-6 w-screen justify-center items-center">
-              <HorizontalCard
-                imgSrc={imgUrl[exisitingEntry.entryId]}
-                header={exisitingEntry.Title}
-                body={exisitingEntry.Body}
-                date={exisitingEntry.Date}
-                checks={exisitingEntry.Checks}
-                onDelete={() => {
-                  handleDelete(exisitingEntry.entryId);
-                }}
-              />
-            </div>
+            <li key={exisitingEntry.Title}>
+              <div className="flex flex-col gap-6 w-screen justify-center items-center">
+                <HorizontalCard
+                  imgSrc={imgUrl[exisitingEntry.entryId]}
+                  header={exisitingEntry.Title}
+                  body={exisitingEntry.Body}
+                  date={exisitingEntry.Date}
+                  checks={exisitingEntry.Checks}
+                  onDelete={() => {
+                    handleDelete(exisitingEntry.entryId);
+                  }}
+                />
+              </div>
+            </li>
           );
         })}
     </div>

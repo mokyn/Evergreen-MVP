@@ -15,6 +15,7 @@ import { AnimatedSwitch } from 'react-router-transition';
 const App: React.FC = () => {
   const [username, setUsername] = useState("");
   const [userID, setUserID] = useState("");
+  //asynch event to fetch login
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       if (user.displayName) {
@@ -31,6 +32,7 @@ const App: React.FC = () => {
   })
 
   const handleLogout = () => {
+    //passed to the logout button on homepage
     firebase.auth().signOut();
     setUsername("");
     setUserID("");

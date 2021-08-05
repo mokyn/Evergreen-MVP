@@ -31,7 +31,7 @@ const HorizontalCard: React.FC<horizontalCardProps> = (props) => {
         <p className="px-6 py-2">{props.date}</p>
         <p className="px-6 py-2">{props.body}</p>
         <ul className="ml-4 px-6 py-2 list-disc text-xs">
-          {checkDesc.map((desc)=>{return (<li>{desc}</li>)})}
+          {checkDesc.map((desc)=>{return (<li key={desc}>{desc}</li>)})}
         </ul>
         <div className="flex justify-end items-end mx-6 py-4">
           <button

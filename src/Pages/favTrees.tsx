@@ -22,6 +22,7 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
   const [nextTreeNum, setNextTreeId] = useState(0);
   const { url } = useRouteMatch();
   const [imgUrl, setImgUrl] = useState<{ [key: string]: string }>({});
+  let mounted = true;
 
   // listen to changes in firestore database
   useEffect(() => {
@@ -40,10 +41,11 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
       const nextTreeId = existingTrees[existingTrees.length - 1].favTreeId + 1;
       setNextTreeId(nextTreeId);
     }
-  }, [existingTrees, props.userID]);
+  }, [existingTrees]);
 
   // grabs img from Storage
   const grabImgURL = async (favTreeId: number) => {
+    console.log("fetching")
     const imgRef = storage.ref(`${props.userID}/favTrees/favTree${favTreeId}`);
     return await imgRef.getDownloadURL();
   };
@@ -52,13 +54,15 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
   useEffect(() => {
     existingTrees.map((existingTree: firebase.firestore.DocumentData) => {
       grabImgURL(existingTree.favTreeId).then((url) => {
-        setImgUrl((prevState) => {
-          return { ...prevState, [`favTree${existingTree.favTreeId}`]: url };
+        if (mounted) {
+          setImgUrl((prevState) => {
+            return { ...prevState, [`favTree${existingTree.favTreeId}`]: url };
         });
+      }
       });
-      return null;
+    return ()=>{mounted=false}
     });
-  });
+  }, [existingTrees]);
 
   const handleToggleForm = () => {
     setIsFormShown((prevState) => !prevState);
@@ -148,12 +152,10 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
                 <li key={existingTree.favTreeId}>
                     <Link
                       to={`${url}/favTree${existingTree.favTreeId}`}
-                      key={existingTree.favTreeId}
                     >
                       <FavTreeCard
                         imgUrl={imgUrl[`favTree${existingTree.favTreeId}`]}
                         cardTitle={existingTree.name}
-                        key={existingTree.favTreeId}
                       />
                     </Link>
                     <button
