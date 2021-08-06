@@ -5,6 +5,8 @@ import { TREE_SHAPE_LESSON_DATA } from "../STATIC_DATA/TREE_SHAPE_LESSON_DATA";
 import ProgressBar from "../Components/ProgressBar";
 import { useEffect } from "react";
 import { firestore } from "../firebase";
+import saveProgress from "../Functions/saveProgress";
+import teacherSquirrel from "../images/teacherSquirrel.png"
 
 const PAGE_NUMS = Object.keys(TREE_SHAPE_LESSON_DATA);
 
@@ -51,19 +53,6 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
   /**
    * function that saves lesson progress to database
    */
-  const saveProgress = () => {
-    const progressRef = firestore.collection(
-      "users/" + props.userID + "/progress"
-    );
-    progressRef
-      .doc("treeShapeLesson")
-      .set({
-        Progress: activePage,
-      })
-      .then(() => {
-        console.log("Progress Saved");
-      });
-  };
 
   const handlePageUp = () => {
     // handles edge case
@@ -82,6 +71,10 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
     }
   };
 
+
+  const handleQuit = () => {
+    saveProgress("treeShapeLesson",props.userID,activePage)
+  }
   // console.log(activePage);
 
   return (
@@ -91,7 +84,7 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
           <button
             className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             type="button"
-            onClick={saveProgress}
+            onClick={handleQuit}
           >
             Home
           </button>
@@ -100,7 +93,7 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
           <button
             className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             type="button"
-            onClick={saveProgress}
+            onClick={handleQuit}
           >
             Play Game
           </button>
@@ -125,6 +118,11 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
           progressPercent={(activePage + 1) / PAGE_NUMS.length}
         />
       </div>
+      <img 
+        src={teacherSquirrel}
+        alt="squirrel"
+        className="fixed bottom-0 left-0 h-80 w-80"
+      ></img>
     </>
   );
 };

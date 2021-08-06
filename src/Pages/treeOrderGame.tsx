@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { TREE_ORDER_GAME_DATA } from "../STATIC_DATA/TREE_ORDER_GAME_DATA";
-import PageProps from "../Components/PageProps";
+import PageProps from "../types/PageProps";
 import "../index.css";
 import { TreeOrderGameCard } from "../Components/TreeOrderGameCard";
 import Confetti from "react-confetti";

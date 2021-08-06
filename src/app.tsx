@@ -77,7 +77,7 @@ const App: React.FC = () => {
           <Route exact path="/treeshapelesson">
             <TreeShapeLesson userID={userID} />
           </Route>
-          <Route exact path="/my-favorite-tree">
+          <Route path="/my-favorite-tree">
             <FavTrees userID={userID} username={username} />
           </Route>
           <Route exact path="/treegame">

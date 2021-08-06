@@ -11,6 +11,7 @@ import ProgressBar from "../Components/ProgressBar";
 import saveProgress from "../Functions/saveProgress";
 import addMedal from "../Functions/addMedal";
 import PageProps from "../types/PageProps";
+import leafImg from "../images/leaf.png"
 
 // number of bad bugs to be clicked to win the game
 const TARGET_CORRECT_GUESSES: number = 15;
@@ -308,11 +309,11 @@ const Game: React.FC<PageProps> = (props) => {
   const handleQuit = () => {
     saveProgress("bugGame",props.userID,correctBugs)
     if (correctBugs===15) {
-      addMedal("bugGame",props.userID,"gold")
+      addMedal("Squash the bugs!",props.userID,"gold")
     } else if (correctBugs>=10) {
-      addMedal("bugGame",props.userID,"silver")
+      addMedal("Squash the bugs!",props.userID,"silver")
     } else if (correctBugs>=5) {
-      addMedal("bugGame",props.userID,"bronze")
+      addMedal("Squash the bugs!",props.userID,"bronze")
     }
   }
 
@@ -329,7 +330,7 @@ const Game: React.FC<PageProps> = (props) => {
       </Link>
       <Link to="/buglesson" className="z-20 absolute top-4 right-8">
         <button
-          onClick={()=>{saveProgress}}
+          onClick={handleQuit}
           className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
           type="button"
         >
@@ -351,6 +352,14 @@ const Game: React.FC<PageProps> = (props) => {
 
       <div className="absolute top-0 left-0 z-10">
         <svg className="w-screen h-screen">
+        <foreignObject x={VIEW_WIDTH-1200} y={VIEW_HEIGHT-900} width="1200" height="1200">
+          <img
+            height={1200}
+            width={1200}
+            src={leafImg}
+            alt={`leaf`}
+          />
+        </foreignObject>
           {bugIds.map((id) => {
             return (
               <Bug
