@@ -6,15 +6,12 @@ import ProgressBar from "../Components/ProgressBar";
 import { useEffect } from "react";
 import { firestore } from "../firebase";
 import saveProgress from "../Functions/saveProgress";
-import teacherSquirrel from "../images/teacherSquirrel.png"
+import teacherSquirrel from "../images/teacherSquirrel.png";
+import PageProps from "../types/PageProps";
 
 const PAGE_NUMS = Object.keys(TREE_SHAPE_LESSON_DATA);
 
-interface TreeShapeLessonProps {
-  userID: string;
-}
-
-export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
+export const TreeShapeLesson: React.FC<PageProps> = (props) => {
   const [activePage, setActivePage] = useState(0);
   const [isFirstPage, setIsFirstPage] = useState(true);
   const [isLastPage, setIsLastPage] = useState(false); // these two states are used to conditionally render prev/ next buttons inside Card
@@ -71,10 +68,9 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
     }
   };
 
-
   const handleQuit = () => {
-    saveProgress("treeShapeLesson",props.userID,activePage)
-  }
+    saveProgress("treeShapeLesson", props.userID, activePage);
+  };
   // console.log(activePage);
 
   return (
@@ -111,7 +107,7 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
           cardBody={TREE_SHAPE_LESSON_DATA[PAGE_NUMS[activePage]].cardBody}
           bodyImgs={TREE_SHAPE_LESSON_DATA[PAGE_NUMS[activePage]].bodyImgs}
           gameLink="treegame"
-          saveProgress={saveProgress}
+          saveProgress={handleQuit}
         />
 
         <ProgressBar
@@ -119,7 +115,7 @@ export const TreeShapeLesson: React.FC<TreeShapeLessonProps> = (props) => {
           progressPercent={(activePage + 1) / PAGE_NUMS.length}
         />
       </div>
-      <img 
+      <img
         src={teacherSquirrel}
         alt="squirrel"
         className="fixed bottom-0 left-0 h-80 w-80"
