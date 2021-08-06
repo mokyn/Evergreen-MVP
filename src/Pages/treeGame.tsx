@@ -10,15 +10,12 @@ import {
 import { DroppableColumn } from "../Components/DroppableColumn";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
+import PageProps from "../types/PageProps";
 
 interface TreeGameState {
   [TreeColumn.CIRCLE]: string[];
   [TreeColumn.TRIANGLE]: string[];
   [TreeColumn.UNSORTED]: string[];
-}
-
-interface TreeGameProps {
-  userID: string;
 }
 
 const initialState: TreeGameState = {
@@ -27,7 +24,7 @@ const initialState: TreeGameState = {
   [TreeColumn.UNSORTED]: TREE_COLUMNS[TreeColumn.UNSORTED].currentTreeIds,
 };
 
-export const TreeGame: React.FC<TreeGameProps> = (props) => {
+export const TreeGame: React.FC<PageProps> = (props) => {
   const [treeGameState, setTreeGameState] =
     useState<TreeGameState>(initialState);
 

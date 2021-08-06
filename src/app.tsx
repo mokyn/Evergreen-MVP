@@ -19,7 +19,7 @@ const App: React.FC = () => {
   const [username, setUsername] = useState("");
   const [userID, setUserID] = useState("");
   //asynch event to fetch login
-  firebase.auth().onAuthStateChanged(user => {
+  firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       if (user.displayName) {
         setUsername(user.displayName);
@@ -73,16 +73,16 @@ const App: React.FC = () => {
             <Achievements userID={userID} username={username} />
           </Route>
           <Route exact path="/buglesson">
-            <BugLesson userID={userID} />
+            <BugLesson userID={userID} username={username} />
           </Route>
           <Route exact path="/treeshapelesson">
-            <TreeShapeLesson userID={userID} />
+            <TreeShapeLesson userID={userID} username={username} />
           </Route>
           <Route path="/my-favorite-tree">
             <FavTrees userID={userID} username={username} />
           </Route>
           <Route exact path="/treegame">
-            <TreeGame userID={userID} />
+            <TreeGame userID={userID} username={username} />
           </Route>
           <Route exact path="/tree-planting-lesson">
             <TreePlantingLesson userID={userID} username={username} />

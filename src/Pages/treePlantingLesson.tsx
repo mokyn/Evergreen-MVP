@@ -5,7 +5,8 @@ import ProgressBar from "../Components/ProgressBar";
 import { useEffect } from "react";
 import { firestore } from "../firebase";
 import { PLANTING_LESSON_DATA } from "../STATIC_DATA/PLANTING_LESSON_DATA";
-import PageProps from "../Components/PageProps";
+import PageProps from "../types/PageProps";
+import saveProgress from "../Functions/saveProgress";
 
 const PAGE_NUMS = Object.keys(PLANTING_LESSON_DATA);
 
@@ -45,23 +46,6 @@ export const TreePlantingLesson: React.FC<PageProps> = (props) => {
     }
   }, [activePage]);
 
-  /**
-   * function that saves lesson progress to database
-   */
-  const saveProgress = () => {
-    const progressRef = firestore.collection(
-      "users/" + props.userID + "/progress"
-    );
-    progressRef
-      .doc("treePlantingLesson")
-      .set({
-        Progress: activePage,
-      })
-      .then(() => {
-        console.log("Progress Saved");
-      });
-  };
-
   const handlePageUp = () => {
     // handles edge case
     if (activePage + 1 >= PAGE_NUMS.length) {
@@ -79,6 +63,10 @@ export const TreePlantingLesson: React.FC<PageProps> = (props) => {
     }
   };
 
+  const handleQuit = () => {
+    saveProgress("treePlantingLesson", props.userID, activePage);
+  };
+
   // console.log(activePage);
 
   return (
@@ -88,7 +76,7 @@ export const TreePlantingLesson: React.FC<PageProps> = (props) => {
           <button
             className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             type="button"
-            onClick={saveProgress}
+            onClick={handleQuit}
           >
             Home
           </button>
@@ -97,7 +85,7 @@ export const TreePlantingLesson: React.FC<PageProps> = (props) => {
           <button
             className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             type="button"
-            onClick={saveProgress}
+            onClick={handleQuit}
           >
             Play Game
           </button>
@@ -115,7 +103,7 @@ export const TreePlantingLesson: React.FC<PageProps> = (props) => {
           cardBody={PLANTING_LESSON_DATA[PAGE_NUMS[activePage]].cardBody}
           bodyImgs={PLANTING_LESSON_DATA[PAGE_NUMS[activePage]].bodyImgs}
           gameLink="tree-order-game"
-          saveProgress={saveProgress}
+          saveProgress={handleQuit}
         />
 
         <ProgressBar
