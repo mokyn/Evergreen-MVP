@@ -6,9 +6,18 @@ import PageProps from "../Components/PageProps";
 import "../index.css";
 import { TreeOrderGameCard } from "../Components/TreeOrderGameCard";
 import Confetti from "react-confetti";
+import { Link } from "react-router-dom";
+import { firestore } from "../firebase";
 
-const CURRENT_TREE_ORDER = Object.keys(TREE_ORDER_GAME_DATA);
-const TARGET_CORRECT_ORDER = ["STEP1", "STEP2", "STEP3", "STEP4", "STEP5"];
+const CURRENT_TREE_ORDER: string[] = Object.keys(TREE_ORDER_GAME_DATA);
+const TARGET_CORRECT_ORDER = [
+  "STEP1",
+  "STEP2",
+  "STEP3",
+  "STEP4",
+  "STEP5",
+  "STEP6",
+];
 
 // helper function to shuffle array
 const shuffle = (array) => {
@@ -17,8 +26,8 @@ const shuffle = (array) => {
   return shuffledArray;
 };
 
-export const TreeOrderGame: React.FC<PageProps> = () => {
-  const [currentTreeOrder, setCurrentTreeOrder] = useState(
+export const TreePlantingOrderGame: React.FC<PageProps> = (props) => {
+  const [currentTreeOrder, setCurrentTreeOrder] = useState<string[]>(
     shuffle(CURRENT_TREE_ORDER)
   );
   const [isTargetReached, setIsTargetReached] = useState(false);
@@ -33,6 +42,38 @@ export const TreeOrderGame: React.FC<PageProps> = () => {
     }
     setIsTargetReached(true);
   }, [currentTreeOrder]);
+
+  /**
+   * at first render, checks from database if progress exists and applies it
+   */
+  useEffect(() => {
+    firestore
+      .collection("users/" + props.userID + "/progress")
+      .doc("treePlantingOrderGame")
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setCurrentTreeOrder(doc?.data()?.Progress);
+        }
+      });
+  }, [props.userID]);
+
+  /**
+   * function that saves game progress to database
+   */
+  const saveProgress = () => {
+    const progressRef = firestore.collection(
+      "users/" + props.userID + "/progress"
+    );
+    progressRef
+      .doc("treePlantingOrderGame")
+      .set({
+        Progress: currentTreeOrder,
+      })
+      .then(() => {
+        console.log("Progress Saved");
+      });
+  };
 
   /**
    * Re-shuffles the array of items
@@ -67,6 +108,26 @@ export const TreeOrderGame: React.FC<PageProps> = () => {
   return (
     <>
       {isTargetReached ? <Confetti /> : null}
+      <div className="p-4 pb-0 flex flex-row gap-6">
+        <Link to="/home">
+          <button
+            className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+            type="button"
+            onClick={saveProgress}
+          >
+            Home
+          </button>
+        </Link>
+        <Link to="/tree-planting-lesson">
+          <button
+            className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+            type="button"
+            onClick={saveProgress}
+          >
+            Teach Me
+          </button>
+        </Link>
+      </div>
       <div className="flex flex-col justify-center items-center gap-12">
         <header className="text-4xl font-custom mt-8">
           <h1>How to Plant A Tree</h1>
