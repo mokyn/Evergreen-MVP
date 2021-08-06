@@ -13,19 +13,25 @@ export const TREE_ORDER_GAME_DATA = {
   },
   STEP3: {
     id: "STEP3",
-    desc: "Place a seed in the hole",
+    desc: "Place the tree in the hole",
     imgUrl:
       "https://us.123rf.com/450wm/dollygrey/dollygrey1808/dollygrey180800010/107783765-watering-can.jpg?ver=6",
   },
   STEP4: {
     id: "STEP4",
-    desc: "Water the soil",
+    desc: "Build a soil berm around the tree",
     imgUrl:
       "https://us.123rf.com/450wm/dollygrey/dollygrey1808/dollygrey180800010/107783765-watering-can.jpg?ver=6",
   },
   STEP5: {
     id: "STEP5",
-    desc: "Wash your hands",
+    desc: "Stake the tree",
+    imgUrl:
+      "https://us.123rf.com/450wm/dollygrey/dollygrey1808/dollygrey180800010/107783765-watering-can.jpg?ver=6",
+  },
+  STEP6: {
+    id: "STEP6",
+    desc: "Water the tree and add mulch",
     imgUrl:
       "https://us.123rf.com/450wm/dollygrey/dollygrey1808/dollygrey180800010/107783765-watering-can.jpg?ver=6",
   },

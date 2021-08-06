@@ -12,7 +12,8 @@ import Achievements from "./Pages/achievements";
 import { TreeShapeLesson } from "./Pages/treeShapeLesson";
 import { AnimatedSwitch } from "react-router-transition";
 import { TreeGame } from "./Pages/treeGame";
-import { TreeOrderGame } from "./Pages/treeOrderGame";
+import { TreePlantingOrderGame } from "./Pages/treePlantingOrderGame";
+import { TreePlantingLesson } from "./Pages/treePlantingLesson";
 
 const App: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -81,8 +82,11 @@ const App: React.FC = () => {
           <Route exact path="/treegame">
             <TreeGame userID={userID} />
           </Route>
+          <Route exact path="/tree-planting-lesson">
+            <TreePlantingLesson userID={userID} username={username} />
+          </Route>
           <Route exact path="/tree-order-game">
-            <TreeOrderGame userID={userID} username={username} />
+            <TreePlantingOrderGame userID={userID} username={username} />
           </Route>
         </AnimatedSwitch>
       )}
