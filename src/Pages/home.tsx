@@ -4,6 +4,7 @@ import squirrelImage from "../images/squirrel.png";
 import favTreeIcon from "../images/favTree2.png";
 import achievementsIcon from "../images/achievements.jpg";
 import treeShapesIcon from "../images/treeShapesIcon.jpg";
+import treePlantingIcon from "../images/treeplanting.jpeg";
 import Title from "../Components/Title";
 
 class Activity {
@@ -79,6 +80,14 @@ const Home: React.FC<HomeProps> = (props) => {
       "/treeshapelesson",
       treeShapesIcon,
       "Tree shapes!"
+    )
+  );
+  activities.push(
+    new Activity(
+      "Lesson- Tree Planting",
+      "/tree-planting-lesson",
+      treePlantingIcon,
+      "Plant a tree!"
     )
   );
   return (
