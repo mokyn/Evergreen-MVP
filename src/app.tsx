@@ -87,6 +87,9 @@ const App: React.FC = () => {
           <Route exact path="/tree-planting-lesson">
             <TreePlantingLesson userID={userID} username={username} />
           </Route>
+          <Route exact path="/tree-planting-lesson">
+            <TreePlantingLesson userID={userID} username={username} />
+          </Route>
           <Route exact path="/tree-order-game">
             <TreePlantingOrderGame userID={userID} username={username} />
           </Route>

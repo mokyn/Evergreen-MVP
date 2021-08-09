@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
+import {Motion, spring} from 'react-motion';
 import { Link } from "react-router-dom";
 import ladyBugImg from "../images/ladybug.png";
 import beeImg from "../images/bee.png";
 import miteImg from "../images/mite.png";
 import slugImg from "../images/slug.png";
-import backgroundImg from "../images/background.jpg";
+import backgroundImg from "../images/sky.jpg";
 import { firestore } from "../firebase";
 import "../index.css";
-import ProgressBar from "../Components/ProgressBar";
 import saveProgress from "../Functions/saveProgress";
 import addMedal from "../Functions/addMedal";
 import PageProps from "../types/PageProps";
 import leafImg from "../images/leaf.png"
+import paw from "../images/paw.png"
+import { dir } from "console";
 
 // number of bad bugs to be clicked to win the game
 const TARGET_CORRECT_GUESSES: number = 15;
@@ -94,7 +96,7 @@ interface BugProps {
   key: number;
   id: number;
   bugType: string;
-  onClick?: () => void;
+  handleBug: (bugType: string, id: number, x:number, y:number) => void;
 }
 
 const Bug: React.FC<BugProps> = (props) => {
@@ -103,6 +105,7 @@ const Bug: React.FC<BugProps> = (props) => {
   const [targetX, setTargetX] = useState(VIEW_WIDTH * Math.random());
   const [targetY, setTargetY] = useState(VIEW_HEIGHT * Math.random());
   const [isOnHover, setIsOnHover] = useState(false);
+  const [direction, setDirection] = useState(0);
 
   // useRef hook enables values to persist in successive renders
   const posIntervalID = useRef(0);
@@ -111,12 +114,23 @@ const Bug: React.FC<BugProps> = (props) => {
   useEffect(() => {
     // when component mounts
     const newPos = () => {
-      setTargetX(VIEW_WIDTH * Math.random());
-      setTargetY(VIEW_HEIGHT * Math.random());
+      if (Math.random() > 0.5) {
+        let tx: number = VIEW_WIDTH * Math.random();
+        let ty: number = VIEW_HEIGHT * Math.random();
+        while (((tx-(VIEW_WIDTH/2+100))/1100)**2+((ty-VIEW_HEIGHT/2)/600)**2>=0.3) {
+          tx= VIEW_WIDTH * Math.random();
+          ty= VIEW_HEIGHT * Math.random();
+        }
+
+        setTargetX(tx);
+        setTargetY(ty);
+      }
+
+      //x={VIEW_WIDTH/2-780} y={VIEW_HEIGHT/2-900} width={1800} height={1800}
     };
 
     // component finds a new target position every 2 second
-    posIntervalID.current = window.setInterval(newPos, 2000);
+    posIntervalID.current = window.setInterval(newPos, 1000);
 
     return () => {
       // when component unmounts
@@ -155,7 +169,7 @@ const Bug: React.FC<BugProps> = (props) => {
 
   return (
     // foreign object is used to wrap the image and render it on svg canvas
-    <foreignObject x={x} y={y} width="120" height="120" onClick={props.onClick}>
+    <foreignObject x={x} y={y} width="120" height="120" onClick={() => props.handleBug(props.bugType, props.id, x, y)}>
       <img
         src={BUGS[props.bugType].imgSrc}
         alt={`${props.bugType}`}
@@ -199,19 +213,131 @@ const BUGS: { [key: string]: BugItem } = {
   },
 };
 
+interface PawProps {
+  squashing: boolean;
+}
+
+const Paw: React.FC<PawProps> = (props) => {
+  const a = useRef(0);
+  const intervalID = useRef(0);
+  const [x, setx] = useState(0);
+  const [y, sety] = useState(VIEW_HEIGHT-200);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const setFromEvent = (e) => {setMouse({ x: e.clientX, y: e.clientY });
+                                console.log(e.clientX, e.clientY)};
+    window.addEventListener("mousemove", setFromEvent);
+
+    /*return () => {
+      window.removeEventListener("mousemove", setFromEvent);
+    };*/
+  }, [a]);
+
+  const move = () => {
+    console.log("moved")
+    if (!props.squashing) {
+      setx((x)=>{return (x+mouse.x-500)/2})
+      sety((y)=>{return (y+mouse.y+50)/2})
+    } else {
+      setx((x)=>{return (x+mouse.x-300)/2})
+      sety((y)=>{return (y+mouse.y-150)/2})
+    }
+  }
+
+  useEffect(()=>{
+    intervalID.current = window.setInterval(move, 10);
+
+    return () => {
+      clearInterval(intervalID.current);
+    };
+  })
+
+  return (
+    <foreignObject x={x} y={y} width={500} height={500}>
+      <img
+        height={500}
+        width={500}
+        src={paw}
+        alt={`paw`}
+      />
+    </foreignObject>
+    )
+}
+
+interface ProgressBarProps {
+  barLength: number;
+  progressPercent: number;
+}  
+
+const ProgressBar: React.FC<ProgressBarProps> = (props) => {
+  const [progressBarLength, setProgresBarLength] = useState(0);
+
+  // runs every time the component rerenders
+  useEffect(() => {
+    setProgresBarLength(props.progressPercent * props.barLength);
+  }, [props.progressPercent, props.barLength]);
+
+  const progressBarStyle = {
+    backgroundColor: "rgb(233, 233, 233)",
+    borderRadius: "0.5rem",
+    width: `${props.barLength}px`,
+  };
+
+  const filledProgressBarStyle = {
+    backgroundColor: "rgb(50, 199, 90)",
+    height: "10px",
+    borderRadius: "1rem",
+    width: `${progressBarLength}px`,
+    // animation
+    transition: "1s ease",
+  };
+
+  return (
+    <div>
+      <div style={progressBarStyle}>
+        <div style={filledProgressBarStyle} />
+      </div>
+    </div>
+  );
+};
+
+interface MessageProps {
+  text: string;
+  x:number;
+  y:number;
+}  
+
 const bugTypes = Object.keys(BUGS);
 
 // main parent component
 const Game: React.FC<PageProps> = (props) => {
   // define states using state hook
   // typescript implicitly knows the type of each state from initial value
+  const [squashing, setSquashing] = useState(false);
+  const [text, setText] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentBugType, setCurrentBugType] = useState(""); // so that modal component knows a bug is good or bad
   const [hasWon, setHasWon] = useState(false);
   const [correctBugs, setCorrectBugs] = useState(0); // tracking progress
   const [bugIds, setBugIds] = useState<number[]>([]); // an array of bug ids
+  const [messageText, setMessageText] = useState("");
+  const [messageX, setMessageX] = useState(0);
+  const [messageY, setMessageY] = useState(0);
+  const [messageO, setMessageO] = useState(1);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const setFromEvent = (e) => setMouse({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", setFromEvent);
+
+    return () => {
+      window.removeEventListener("mousemove", setFromEvent);
+    };
+  }, []);
 
   const intervalID = useRef(0);
+  const messageIntervalID = useRef(0);
 
   // this variable keeps track of total # of spawned bugs
   // also sets the id for a newest spawned bug
@@ -222,7 +348,10 @@ const Game: React.FC<PageProps> = (props) => {
     .get()
     .then((doc) => {
       if (doc.exists) {
-    setCorrectBugs(doc?.data()?.Progress);
+        setCorrectBugs(doc?.data()?.Progress);
+        if (doc?.data()?.Progress >= TARGET_CORRECT_GUESSES) {
+          setHasWon(true);
+        }
       }
     })
   },[props.userID])
@@ -250,6 +379,21 @@ const Game: React.FC<PageProps> = (props) => {
     };
   }, [bugIds, numSpawnedBugs]);
 
+  useEffect(() => {
+    // makes the text rise
+
+    const handleText = () => {
+      setMessageO((o)=>o-0.01)
+      setMessageY((y)=>y-0.5)
+    };
+
+    messageIntervalID.current = window.setInterval(handleText, 100);
+
+    return () => {
+      clearInterval(intervalID.current);
+    };
+  }, [bugIds, numSpawnedBugs]);
+
   /**
    * toggles the render state of modal component
    */
@@ -262,21 +406,33 @@ const Game: React.FC<PageProps> = (props) => {
    *
    * @param bugId - the id of the bug so that it can be deleted from bugs array
    */
-  const handleBug = (bugType: string, bugId: number) => {
-    toggleModal();
+  const handleBug = (bugType: string, bugId: number, x: number, y:number) => {
+    console.log("clicked")
 
-    setCurrentBugType(bugType);
+    setSquashing(true);
+    setTimeout(()=>{setSquashing(false);},300);
+
+    setTimeout(()=>{
+      setMessageText(BUGS[bugType].isFriendly ? "Oops!" : "Nice!");
+      setMessageX(x+75);
+      setMessageY(y);
+      setMessageO(1);
+    },300);
 
     if (BUGS[bugType]) {
       if (!BUGS[bugType].isFriendly) {
         if (!hasWon) {
-          setCorrectBugs((prevState) => {
-            return prevState + 1;
-          });
+          setCorrectBugs((prevState) => 
+            prevState + 1
+          );
           if (correctBugs + 1 === TARGET_CORRECT_GUESSES) {
             setHasWon(true);
           }
         }
+      } else {
+        setCorrectBugs((prevState) => 
+        prevState - 3
+      );
       }
     }
 
@@ -337,25 +493,13 @@ const Game: React.FC<PageProps> = (props) => {
           Teach Me
         </button>
       </Link>
-      <Modal
-        showModal={showModal}
-        isFriendly={currentBugType ? BUGS[currentBugType].isFriendly : false}
-        hasWon={hasWon}
-        onClick={() => toggleModal()}
-      />
-      <div className="absolute top-16 left-16 z-10">
-        <ProgressBar
-          barLength={400}
-          progressPercent={correctBugs / TARGET_CORRECT_GUESSES}
-        />
-      </div>
 
       <div className="absolute top-0 left-0 z-10">
         <svg className="w-screen h-screen">
-        <foreignObject x={VIEW_WIDTH-1200} y={VIEW_HEIGHT-900} width="1200" height="1200">
+        <foreignObject x={VIEW_WIDTH/2-780} y={VIEW_HEIGHT/2-900} width={1800} height={1800}>
           <img
-            height={1200}
-            width={1200}
+            height={1800}
+            width={1800}
             src={leafImg}
             alt={`leaf`}
           />
@@ -366,11 +510,20 @@ const Game: React.FC<PageProps> = (props) => {
                 key={id}
                 id={id}
                 bugType={getRandomBug(id)}
-                onClick={() => handleBug(getRandomBug(id), id)}
+                handleBug={handleBug}
               />
             );
           })}
+        <text className="text-3xl text-white font-bold" x={messageX} y={messageY} opacity={messageO}>{messageText}</text>
+        <Paw squashing={squashing}/>
         </svg>
+      </div>
+
+      <div className="absolute top-16 left-16 z-10">
+        <ProgressBar
+          barLength={400}
+          progressPercent={correctBugs / TARGET_CORRECT_GUESSES}
+        />
       </div>
 
       <img
