@@ -24,72 +24,6 @@ const UPPER_BUG_COUNT: number = 10;
 const VIEW_WIDTH = document.documentElement.clientWidth;
 const VIEW_HEIGHT = document.documentElement.clientHeight;
 
-// modal component that appears when clicking a bug
-interface ModalProps {
-  showModal: boolean;
-  hasWon: boolean;
-  isFriendly: boolean;
-  onClick: () => void;
-}
-
-const Modal: React.FC<ModalProps> = (props) => {
-  let modalContent, modalHeader;
-  if (props.hasWon) {
-    modalHeader = "Congratulations!";
-    modalContent = "You have won the game.";
-  } else if (props.isFriendly) {
-    modalHeader = "Oops!";
-    modalContent = "That's a good bug.";
-  } else {
-    modalHeader = "Correct!";
-    modalContent = "That's a bad bug.";
-  }
-
-  if (props.showModal) {
-    return (
-      <>
-        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-          <div className="relative w-auto my-6 mx-auto max-w-3xl">
-            {/*content*/}
-            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-              {/*header*/}
-              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                <h3 className="text-3xl font-semibold">{modalHeader}</h3>
-                <button
-                  className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                  onClick={props.onClick}
-                >
-                  <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                    ×
-                  </span>
-                </button>
-              </div>
-              {/*body*/}
-              <div className="relative p-6 flex-auto">
-                <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-                  {modalContent}
-                </p>
-              </div>
-              {/*footer*/}
-              <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                <button
-                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  type="button"
-                  onClick={props.onClick}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-      </>
-    );
-  } else {
-    return null;
-  }
-};
 
 // bug component
 interface BugProps {
@@ -105,7 +39,6 @@ const Bug: React.FC<BugProps> = (props) => {
   const [targetX, setTargetX] = useState(VIEW_WIDTH * Math.random());
   const [targetY, setTargetY] = useState(VIEW_HEIGHT * Math.random());
   const [isOnHover, setIsOnHover] = useState(false);
-  const [direction, setDirection] = useState(0);
 
   // useRef hook enables values to persist in successive renders
   const posIntervalID = useRef(0);
@@ -145,6 +78,8 @@ const Bug: React.FC<BugProps> = (props) => {
       setX((x) => (moveRate * targetX + x) / (1 + moveRate));
       setY((y) => (moveRate * targetY + y) / (1 + moveRate));
     };
+
+    console.log("bug ran!")
 
     // component changes x, y values every 20ms
     moveIntervalID.current = window.setInterval(move, 20);
@@ -213,45 +148,61 @@ const BUGS: { [key: string]: BugItem } = {
   },
 };
 
-interface PawProps {
-  squashing: boolean;
-}
 
-const Paw: React.FC<PawProps> = (props) => {
-  const a = useRef(0);
+const Paw: React.FC = (props) => {
   const intervalID = useRef(0);
   const [x, setx] = useState(0);
   const [y, sety] = useState(VIEW_HEIGHT-200);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [squashing, setSquashing] = useState(false);
+  const mousex = useRef(0);
+  const mousey = useRef(0);
 
+  
   useEffect(() => {
-    const setFromEvent = (e) => {setMouse({ x: e.clientX, y: e.clientY });
-                                console.log(e.clientX, e.clientY)};
+    const setFromEvent = (e) => {mousex.current = e.clientX; mousey.current=e.clientY;};
     window.addEventListener("mousemove", setFromEvent);
 
-    /*return () => {
+    return () => {
       window.removeEventListener("mousemove", setFromEvent);
-    };*/
-  }, [a]);
+    };
+  }, []);
 
-  const move = () => {
-    console.log("moved")
-    if (!props.squashing) {
-      setx((x)=>{return (x+mouse.x-500)/2})
-      sety((y)=>{return (y+mouse.y+50)/2})
-    } else {
-      setx((x)=>{return (x+mouse.x-300)/2})
-      sety((y)=>{return (y+mouse.y-150)/2})
+
+
+  useEffect(() => {
+    const setFromEvent = (e) => {
+      console.log("worked")
+      setSquashing(true);
+      setTimeout(()=>{setSquashing(false);},300);
     }
-  }
+    window.addEventListener("click", setFromEvent);
+
+    return () => {
+      window.removeEventListener("click", setFromEvent);
+    };
+  }, []);
+
 
   useEffect(()=>{
-    intervalID.current = window.setInterval(move, 10);
+    const move = () => {
+      if (!squashing) {
+        setx((x)=>(x+mousex.current-500)/2)
+        sety((y)=>(y+mousey.current+50)/2)
+      } else {
+        setx((x)=>(x+mousex.current-300)/2)
+        sety((y)=>(y+mousey.current-150)/2)
+      }
+    }
+
+    intervalID.current = window.setInterval(move, 25);
+
+    console.log("ran!")
 
     return () => {
       clearInterval(intervalID.current);
     };
-  })
+  }, [squashing])
 
   return (
     <foreignObject x={x} y={y} width={500} height={500}>
@@ -314,10 +265,6 @@ const bugTypes = Object.keys(BUGS);
 const Game: React.FC<PageProps> = (props) => {
   // define states using state hook
   // typescript implicitly knows the type of each state from initial value
-  const [squashing, setSquashing] = useState(false);
-  const [text, setText] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [currentBugType, setCurrentBugType] = useState(""); // so that modal component knows a bug is good or bad
   const [hasWon, setHasWon] = useState(false);
   const [correctBugs, setCorrectBugs] = useState(0); // tracking progress
   const [bugIds, setBugIds] = useState<number[]>([]); // an array of bug ids
@@ -325,16 +272,6 @@ const Game: React.FC<PageProps> = (props) => {
   const [messageX, setMessageX] = useState(0);
   const [messageY, setMessageY] = useState(0);
   const [messageO, setMessageO] = useState(1);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const setFromEvent = (e) => setMouse({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", setFromEvent);
-
-    return () => {
-      window.removeEventListener("mousemove", setFromEvent);
-    };
-  }, []);
 
   const intervalID = useRef(0);
   const messageIntervalID = useRef(0);
@@ -394,12 +331,6 @@ const Game: React.FC<PageProps> = (props) => {
     };
   }, [bugIds, numSpawnedBugs]);
 
-  /**
-   * toggles the render state of modal component
-   */
-  const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
-  };
 
   /**
    * Delivers info about current clicked bug to Modal and removes the bug from screen
@@ -408,9 +339,6 @@ const Game: React.FC<PageProps> = (props) => {
    */
   const handleBug = (bugType: string, bugId: number, x: number, y:number) => {
     console.log("clicked")
-
-    setSquashing(true);
-    setTimeout(()=>{setSquashing(false);},300);
 
     setTimeout(()=>{
       setMessageText(BUGS[bugType].isFriendly ? "Oops!" : "Nice!");
@@ -515,7 +443,7 @@ const Game: React.FC<PageProps> = (props) => {
             );
           })}
         <text className="text-3xl text-white font-bold" x={messageX} y={messageY} opacity={messageO}>{messageText}</text>
-        <Paw squashing={squashing}/>
+        <Paw/>
         </svg>
       </div>
 
