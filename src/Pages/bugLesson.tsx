@@ -111,6 +111,7 @@ const BugLesson: React.FC<BugLessonProps> = (props) => {
         cardBody={BUG_LESSON_DATA[PAGE_NUMS[activePage]].cardBody}
         bodyImgs={BUG_LESSON_DATA[PAGE_NUMS[activePage]].bodyImgs}
         gameLink="buggame"
+        saveProgress={saveProgress}
       />
     </>
   );

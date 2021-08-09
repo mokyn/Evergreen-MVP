@@ -13,6 +13,7 @@ interface CardProps {
   isFirstPage?: boolean;
   isLastPage?: boolean;
   gameLink?: string;
+  saveProgress: () => void;
 }
 
 const Card: React.FC<CardProps> = (props) => {
@@ -60,7 +61,7 @@ const Card: React.FC<CardProps> = (props) => {
               <Link to={`/${props.gameLink}`}>
                 <button
                   type="button"
-                  onClick={props.onClickNext}
+                  onClick={props.saveProgress}
                   className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
                 >
                   Play Game
