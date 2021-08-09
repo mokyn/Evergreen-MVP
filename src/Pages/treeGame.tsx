@@ -11,6 +11,7 @@ import { DroppableColumn } from "../Components/DroppableColumn";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
 import PageProps from "../types/PageProps";
+import Confetti from "react-confetti";
 
 interface TreeGameState {
   [TreeColumn.CIRCLE]: string[];
@@ -158,6 +159,7 @@ export const TreeGame: React.FC<PageProps> = (props) => {
   };
   return (
     <>
+      {isCircleTargetReached && isTriangleTargetReached ? <Confetti /> : null}
       <div className="p-4 pb-0 flex flex-row gap-6">
         <Link to="/home">
           <button
