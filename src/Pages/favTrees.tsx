@@ -187,7 +187,6 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
 
 const FavTrees: React.FC<PageProps> = (props) => {
   const { path } = useRouteMatch();
-  //   console.log(path) = '/fav-tree'
 
   return (
     <>
