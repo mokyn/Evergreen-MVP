@@ -145,9 +145,7 @@ const FavTreesMenu: React.FC<PageProps> = (props) => {
 
   return (
     <>
-      <div onClick={() => window.location.reload()}>
-        <HomeButton />
-      </div>
+      <HomeButton />
 
       <AddTreeForm
         isFormShown={isFormShown}
@@ -202,7 +200,6 @@ const FavTrees: React.FC<PageProps> = (props) => {
 
   return (
     <>
-      <Router>
         <AnimatedSwitch
           atEnter={{ opacity: 0 }}
           atLeave={{ opacity: 0 }}
@@ -216,7 +213,6 @@ const FavTrees: React.FC<PageProps> = (props) => {
             <TreeJournal username={props.username} userID={props.userID} />
           </Route>
         </AnimatedSwitch>
-      </Router>
     </>
   );
 };
