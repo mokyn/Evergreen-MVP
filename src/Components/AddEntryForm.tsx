@@ -18,7 +18,15 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
   const [date, setDate] = useState("");
   const [image, setImage] = useState<File>();
   const [uploadStatus, setUploadStatus] = useState("Not started");
-  const [checkboxes, setCheckBoxes] = useState([false,false,false,false,false,false,false]);
+  const [checkboxes, setCheckBoxes] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   // TODO: find out what type event is
   const handleTitleChange = (event: any) => {
@@ -35,9 +43,9 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
 
   const handleCheck = (event: any) => {
     var changed = checkboxes;
-    changed[event.target.id]=event.target.checked;
-    setCheckBoxes(changed)
-    console.log(checkboxes)
+    changed[event.target.id] = event.target.checked;
+    setCheckBoxes(changed);
+    console.log(checkboxes);
   };
 
   const handleImage = (event: any) => {
@@ -52,7 +60,7 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
     }
 
     const imageRef = storage.ref(
-      props.userID+`/favTrees/${props.favTreeId}/entry${props.nextEntryNum}`
+      props.userID + `/favTrees/${props.favTreeId}/entry${props.nextEntryNum}`
     );
 
     const options = {
@@ -84,8 +92,8 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
    */
   const onSubmit = () => {
     const favTreesRef = firestore.collection(
-      `users/`+props.userID+`/favTrees/${props.favTreeId}/entries`
-    ); // awesome: '/entries' collection doesn't exist yet but automatically gets added
+      `users/` + props.userID + `/favTrees/${props.favTreeId}/entries`
+    ); // '/entries' collection doesn't exist yet but automatically gets added
     favTreesRef
       .doc(`entry${props.nextEntryNum}`)
       .set({
@@ -99,10 +107,9 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
         console.log("successfully submitted");
         setBody("");
         setTitle("");
-        props.setNextEntryNum((prevState) => prevState + 1);
+        // no need to set nextEntryNum here since treeJournal listens to database in realtime and runs its useEffect.
         props.onToggleForm();
       });
-
   };
 
   if (props.showForm) {
@@ -161,34 +168,93 @@ export const AddEntryForm: React.FC<AddEntryFormProps> = (props) => {
                 <div className="flex flex-col">
                   <div className="grid grid-cols-4 mb-2">
                     <div className="flex flex-row">
-                      <input className="m-2" type="checkbox" id="0" name="leafColor" value="leafColor" onChange={handleCheck}></input>
-                      <label htmlFor="leafColor">Did the leaves change color since last time?</label>
+                      <input
+                        className="m-2"
+                        type="checkbox"
+                        id="0"
+                        name="leafColor"
+                        value="leafColor"
+                        onChange={handleCheck}
+                      ></input>
+                      <label htmlFor="leafColor">
+                        Did the leaves change color since last time?
+                      </label>
                     </div>
                     <div className="flex flex-row">
-                      <input className="m-2" type="checkbox" id="1" name="bugs" value="bugs" onChange={handleCheck}></input>
-                      <label htmlFor="leafColor">Do you see any bugs in the tree?</label>
+                      <input
+                        className="m-2"
+                        type="checkbox"
+                        id="1"
+                        name="bugs"
+                        value="bugs"
+                        onChange={handleCheck}
+                      ></input>
+                      <label htmlFor="leafColor">
+                        Do you see any bugs in the tree?
+                      </label>
                     </div>
                     <div className="flex flex-row">
-                      <input className="m-2" type="checkbox" id="2" name="birds" value="birds" onChange={handleCheck}></input>
-                      <label htmlFor="leafColor">Do you see any birds or animals?</label>
+                      <input
+                        className="m-2"
+                        type="checkbox"
+                        id="2"
+                        name="birds"
+                        value="birds"
+                        onChange={handleCheck}
+                      ></input>
+                      <label htmlFor="leafColor">
+                        Do you see any birds or animals?
+                      </label>
                     </div>
                     <div className="flex flex-row">
-                      <input className="m-2" type="checkbox" id="3" name="loseLeaves" value="loseLeaves" onChange={handleCheck}></input>
-                      <label htmlFor="leafColor">Did your tree lose its leaves?</label>
+                      <input
+                        className="m-2"
+                        type="checkbox"
+                        id="3"
+                        name="loseLeaves"
+                        value="loseLeaves"
+                        onChange={handleCheck}
+                      ></input>
+                      <label htmlFor="leafColor">
+                        Did your tree lose its leaves?
+                      </label>
                     </div>
                   </div>
                   <div className="grid grid-cols-4 mb-2">
                     <div className="flex flex-row">
-                    <input className="m-2" type="checkbox" id="4" name="newLeaves" value="newLeaves" onChange={handleCheck}></input>
-                    <label htmlFor="leafColor">Do you see any new leaves or flowers?</label>
+                      <input
+                        className="m-2"
+                        type="checkbox"
+                        id="4"
+                        name="newLeaves"
+                        value="newLeaves"
+                        onChange={handleCheck}
+                      ></input>
+                      <label htmlFor="leafColor">
+                        Do you see any new leaves or flowers?
+                      </label>
                     </div>
                     <div className="flex flex-row">
-                    <input className="m-2" type="checkbox" id="5" name="brokenBranches" value="brokenBranches" onChange={handleCheck}></input>
-                    <label htmlFor="leafColor">Any broken branches?</label>
+                      <input
+                        className="m-2"
+                        type="checkbox"
+                        id="5"
+                        name="brokenBranches"
+                        value="brokenBranches"
+                        onChange={handleCheck}
+                      ></input>
+                      <label htmlFor="leafColor">Any broken branches?</label>
                     </div>
                     <div className="flex flex-row">
-                    <input className="m-2" type="checkbox" id="6" name="holes" value="holes" onChange={handleCheck}></input>
-                    <label htmlFor="leafColor">Any holes in the tree?</label>
+                      <input
+                        className="m-2"
+                        type="checkbox"
+                        id="6"
+                        name="holes"
+                        value="holes"
+                        onChange={handleCheck}
+                      ></input>
+                      <label htmlFor="leafColor">Any holes in the tree?</label>
                     </div>
                   </div>
                 </div>
